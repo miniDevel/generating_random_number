@@ -11,40 +11,44 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        "에서",
-                        style: customTextStyle,
-                      ),
-                      Text(
-                        "까지",
-                        style: customTextStyle,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "개 숫자 생성!",
-                        style: customTextStyle,
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "중복 숫자 허용",
-                        style: customTextStyle,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      child: TextFormField(),
+                    ),
+                    Text(
+                      "에서",
+                      style: customTextStyle,
+                    ),
+                    Text(
+                      "까지",
+                      style: customTextStyle,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "개 숫자 생성!",
+                      style: customTextStyle,
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "중복 숫자 허용",
+                      style: customTextStyle,
+                    ),
+                  ],
+                ),
+              ],
             ),
             SizedBox(height: 50),
             BottomPicture(),
