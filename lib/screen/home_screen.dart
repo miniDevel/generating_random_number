@@ -8,15 +8,15 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: GestureDetector(
-        onTap: (){
-          FocusScope.of(context)
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
           body: Column(
             children: [
-            TopTexture(),
-            MiddleButton(),
-            BottomPicture(),
+              TopTexture(),
+              MiddleButton(),
+              BottomPicture(),
             ],
           ),
         ),
@@ -31,10 +31,13 @@ class TopTexture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle customTextStyle =
-    TextStyle(fontWeight: FontWeight.w600, fontSize: 30);
+        TextStyle(fontWeight: FontWeight.w600, fontSize: 30);
 
     return Column(
       children: [
+        SizedBox(
+          height: 150,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -72,7 +75,9 @@ class TopTexture extends StatelessWidget {
             )
           ],
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -88,7 +93,6 @@ class TopTexture extends StatelessWidget {
   }
 }
 
-
 class BottomPicture extends StatelessWidget {
   const BottomPicture({super.key});
 
@@ -100,7 +104,7 @@ class BottomPicture extends StatelessWidget {
         top: 50,
         right: 50,
         child: Text(
-          '위를 입력하면 내가 숫자를 말해줄게!',
+          '위에 입력하면 내가 숫자를 말해줄게!',
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
         ),
       ),
@@ -114,8 +118,11 @@ class MiddleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 30.0,),
-      child: ElevatedButton(onPressed: (){}, child: Text("생성 하기")),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12.0,
+        vertical: 30.0,
+      ),
+      child: ElevatedButton(onPressed: () {}, child: Text("생성 하기")),
     );
   }
 }
