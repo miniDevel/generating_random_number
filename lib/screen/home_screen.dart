@@ -7,13 +7,18 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-          TopTexture(),
-          MiddleButton(),
-          BottomPicture(),
-          ],
+      child: GestureDetector(
+        onTap: (){
+          FocusScope.of(context)
+        },
+        child: Scaffold(
+          body: Column(
+            children: [
+            TopTexture(),
+            MiddleButton(),
+            BottomPicture(),
+            ],
+          ),
         ),
       ),
     );
@@ -36,7 +41,7 @@ class TopTexture extends StatelessWidget {
             CustomTextField(
               initialValue: null,
               hintText: "최솟값",
-              boxWidth: 100,
+              boxWidth: 80,
             ),
             Text(
               " 에서  ",
@@ -45,7 +50,7 @@ class TopTexture extends StatelessWidget {
             CustomTextField(
               initialValue: null,
               hintText: "최댓값",
-              boxWidth: 100,
+              boxWidth: 80,
             ),
             Text(
               " 까지",
@@ -59,7 +64,7 @@ class TopTexture extends StatelessWidget {
             CustomTextField(
               initialValue: null,
               hintText: "생성 개수",
-              boxWidth: 50,
+              boxWidth: 100,
             ),
             Text(
               " 개 숫자 생성!",
@@ -67,6 +72,7 @@ class TopTexture extends StatelessWidget {
             )
           ],
         ),
+        SizedBox(height: 20,),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -107,6 +113,9 @@ class MiddleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: (){}, child: Text("생성 하기"));
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 30.0,),
+      child: ElevatedButton(onPressed: (){}, child: Text("생성 하기")),
+    );
   }
 }

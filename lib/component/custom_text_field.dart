@@ -23,16 +23,27 @@ class CustomTextField extends StatelessWidget {
   }
 
   Widget renderTextField() {
+    TextStyle customTextStyle =
+        TextStyle(fontWeight: FontWeight.w600, fontSize: 24);
+
     return TextFormField(
+      style: customTextStyle.copyWith(color: Colors.black87),
       cursorColor: Colors.black87,
       maxLines: 1,
+      textAlign: TextAlign.center,
       initialValue: initialValue,
       keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       decoration: InputDecoration(
-        hintText: hintText,
-      ),
-
+          contentPadding: EdgeInsets.only(bottom: 8),
+          hintText: hintText,
+          hintStyle: customTextStyle.copyWith(color: Colors.grey),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.black87,
+              width: 2,
+            ),
+          )),
     );
   }
 }
