@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:generating_random_number/component/bottom_picture.dart';
+import 'package:generating_random_number/component/custom_button.dart';
 import 'package:generating_random_number/component/custom_text_field.dart';
+import 'package:generating_random_number/component/custom_screen.dart';
+import 'package:generating_random_number/screen/result_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,12 +16,33 @@ class HomeScreen extends StatelessWidget {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
-          body: Column(
-            children: [
-              TopTexture(),
-              MiddleButton(),
-              BottomPicture(),
-            ],
+          body: SingleChildScrollView(
+            child: CustomScreenContainer(
+              children: [
+                SizedBox(height: 120),
+                TopTexture(),
+                SizedBox(height: 120),
+                MiddleButton(),
+                Expanded(
+                  child: BottomPicture(
+                    child: Stack(
+                      children: [
+                        Image.asset('assets/img/home_screen.png'),
+                        Positioned(
+                          top: 50,
+                          right: 50,
+                          child: Text(
+                            '위에 입력하면 내가 숫자를 말해줄게!',
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -35,9 +60,6 @@ class TopTexture extends StatelessWidget {
 
     return Column(
       children: [
-        SizedBox(
-          height: 150,
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -93,36 +115,20 @@ class TopTexture extends StatelessWidget {
   }
 }
 
-class BottomPicture extends StatelessWidget {
-  const BottomPicture({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(children: [
-      Image.asset('assets/img/home_screen.png'),
-      Positioned(
-        top: 50,
-        right: 50,
-        child: Text(
-          '위에 입력하면 내가 숫자를 말해줄게!',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-        ),
-      ),
-    ]);
-  }
-}
-
 class MiddleButton extends StatelessWidget {
   const MiddleButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12.0,
-        vertical: 30.0,
-      ),
-      child: ElevatedButton(onPressed: () {}, child: Text("생성 하기")),
-    );
+    return CustomButton(
+        child: Text(
+          "생성 하기",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+        ),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => ResultScreen()),
+          );
+        });
   }
 }
