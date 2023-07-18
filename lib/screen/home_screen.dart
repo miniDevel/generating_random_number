@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:generating_random_number/component/bottom_picture.dart';
 import 'package:generating_random_number/component/custom_button.dart';
 import 'package:generating_random_number/component/custom_text_field.dart';
-import 'package:generating_random_number/component/custom_screen.dart';
 import 'package:generating_random_number/screen/result_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final topTextureKey = GlobalKey();
+  final middleButtonKey = GlobalKey();
+  final stackKey = GlobalKey();
+
+  @override
   Widget build(BuildContext context) {
+    final emptySpaceHeight = (MediaQuery.of(context).size.height -
+        70 -
+        getTopTextureHeight() -
+        getMiddleButtonHeight() -
+        getStackHeight());
+
+    SizedBox EmptySpaceHeight(){
+      return SizedBox(
+        height: emptySpaceHeight / 3,
+      );
+    }
+
     return SafeArea(
       child: GestureDetector(
         onTap: () {
@@ -17,36 +36,49 @@ class HomeScreen extends StatelessWidget {
         },
         child: Scaffold(
           body: SingleChildScrollView(
-            child: CustomScreenContainer(
-              children: [
-                SizedBox(height: 120),
-                TopTexture(),
-                SizedBox(height: 120),
-                MiddleButton(),
-                Expanded(
-                  child: BottomPicture(
-                    child: Stack(
-                      children: [
-                        Image.asset('assets/img/home_screen.png'),
-                        Positioned(
-                          top: 50,
-                          right: 50,
-                          child: Text(
-                            '위에 입력하면 내가 숫자를 말해줄게!',
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ],
-                    ),
+            child: Container(
+              height: MediaQuery.of(context).size.height - 50,
+              child: Column(
+                children: [
+                  EmptySpaceHeight(),
+                  TopTexture(
+                    key: topTextureKey,
                   ),
-                ),
-              ],
+                  EmptySpaceHeight(),
+                  MiddleButton(
+                    key: middleButtonKey,
+                  ),
+                  EmptySpaceHeight(),
+                  BottomPicture(
+                      stackKey: stackKey, text: '위에 입력하면 내가 숫자를 말해줄게!'),
+                  SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+
+
+  double getTopTextureHeight() {
+    final RenderBox? renderBox =
+        topTextureKey.currentContext?.findRenderObject() as RenderBox?;
+    return renderBox?.size.height ?? 0.0;
+  }
+
+  double getMiddleButtonHeight() {
+    final RenderBox? renderBox =
+        middleButtonKey.currentContext?.findRenderObject() as RenderBox?;
+    return renderBox?.size.height ?? 0.0;
+  }
+
+  double getStackHeight() {
+    final RenderBox? renderBox =
+        stackKey.currentContext?.findRenderObject() as RenderBox?;
+    return renderBox?.size.height ?? 0.0;
   }
 }
 
@@ -130,5 +162,34 @@ class MiddleButton extends StatelessWidget {
             MaterialPageRoute(builder: (_) => ResultScreen()),
           );
         });
+  }
+}
+
+class BottomPicture extends StatelessWidget {
+  final GlobalKey stackKey;
+  final String text;
+
+  const BottomPicture({
+    required this.stackKey,
+    required this.text,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      key: stackKey,
+      children: [
+        Image.asset('assets/img/home_screen.png'),
+        Positioned(
+          top: 50,
+          right: 50,
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
+    );
   }
 }

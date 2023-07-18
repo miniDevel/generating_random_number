@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:generating_random_number/component/bottom_picture.dart';
+
 import 'package:generating_random_number/component/custom_button.dart';
-import 'package:generating_random_number/component/custom_screen.dart';
 
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key});
@@ -10,13 +9,20 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: CustomScreenContainer(
-          children: [
-            ReStartButton(),
-            BottomPicture(
-              child: Container(),
-            ),
-          ],
+        body: Container(
+          color: Colors.grey,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              ReStartButton(),
+              Stack(
+                children: [
+                  Image.asset('assets/img/result.png'),
+                  Image.asset('assets/img/speech_bubble.png',height: 100,)
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
