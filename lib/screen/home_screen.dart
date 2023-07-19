@@ -16,6 +16,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final middleButtonKey = GlobalKey();
   final stackKey = GlobalKey();
   String currentText = '위에 입력하면 내가 숫자를 말해줄게!';
+  String? maximumNumber;
+  String? minimumNumber;
+  int? generationCount;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
         getMiddleButtonHeight() -
         getStackHeight());
 
-    SizedBox EmptySpaceHeight(){
+    SizedBox EmptySpaceHeight() {
       return SizedBox(
         height: emptySpaceHeight / 3,
       );
@@ -45,15 +48,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   EmptySpaceHeight(),
                   _TopTexture(
+                    onMinimumNumberChanged: onMinimumNumberChanged,
+                    onCountChanged: onCountChanged,
+                    onMaximumNumberChanged: onMaximumNumberChanged,
                     key: topTextureKey,
                   ),
                   EmptySpaceHeight(),
                   _MiddleButton(
+                    onButtonPressed: onButtonPressed,
                     key: middleButtonKey,
                   ),
                   EmptySpaceHeight(),
-                  _BottomPicture(
-                      stackKey: stackKey, text: currentText),
+                  _BottomPicture(stackKey: stackKey, text: currentText),
                   SizedBox(height: 20),
                 ],
               ),
@@ -64,7 +70,50 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  onButtonPressed() {
+    if (minimumNumber == null ||
+        maximumNumber == null ||
+        generationCount == null) {
+      setState(() {
+        currentText = '빈 칸을 전부 입력 해줘~';
+      });
+    } else {
+      int? min = int.tryParse(minimumNumber!);
+      int? max = int.tryParse(maximumNumber!);
 
+      if (min == null ||
+          max == null ||
+          min > max ||
+          max - min < generationCount!) {
+        setState(() {
+          currentText = '너무 많이 만드는거 같아!';
+        });
+      } else {
+        if (generationCount! <= 0) {
+          setState(() {
+            currentText = '0개는 만들수 없어 ㅠ';
+          });
+        } else {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => ResultScreen()),
+          );
+        }
+      }
+    }
+    FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  onMinimumNumberChanged(String? val) {
+    minimumNumber = val;
+  }
+
+  onCountChanged(String? val) {
+    generationCount = int.parse(val!);
+  }
+
+  onMaximumNumberChanged(String? val) {
+    maximumNumber = val;
+  }
 
   double getTopTextureHeight() {
     final RenderBox? renderBox =
@@ -86,7 +135,15 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _TopTexture extends StatelessWidget {
-  const _TopTexture({super.key});
+  final ValueChanged<String>? onMinimumNumberChanged;
+  final ValueChanged<String>? onMaximumNumberChanged;
+  final ValueChanged<String>? onCountChanged;
+  const _TopTexture({
+    required this.onCountChanged,
+    required this.onMaximumNumberChanged,
+    required this.onMinimumNumberChanged,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -98,19 +155,15 @@ class _TopTexture extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomTextField(
-              initialValue: null,
-              hintText: "최솟값",
-              boxWidth: 80,
+            _MinimumNumberTextField(
+              onMinimumNumberChanged: onMinimumNumberChanged,
             ),
             Text(
               " 에서  ",
               style: customTextStyle,
             ),
-            CustomTextField(
-              initialValue: null,
-              hintText: "최댓값",
-              boxWidth: 80,
+            _MaximumNumberTextField(
+              onMaximumNumberChanged: onMaximumNumberChanged,
             ),
             Text(
               " 까지",
@@ -121,10 +174,8 @@ class _TopTexture extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomTextField(
-              initialValue: null,
-              hintText: "생성 개수",
-              boxWidth: 100,
+            _GenerationCount(
+              onCountChanged: onCountChanged,
             ),
             Text(
               " 개 숫자 생성!",
@@ -135,36 +186,101 @@ class _TopTexture extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "중복 숫자 허용",
-              style: customTextStyle.copyWith(
-                  fontSize: 22, fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
+        _Duplication(),
       ],
     );
   }
 }
 
+class _MinimumNumberTextField extends StatelessWidget {
+  final ValueChanged<String>? onMinimumNumberChanged;
+  const _MinimumNumberTextField({
+    required this.onMinimumNumberChanged,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextField(
+      onChanged: onMinimumNumberChanged,
+      initialValue: null,
+      hintText: "최솟값",
+      boxWidth: 80,
+    );
+  }
+}
+
+class _MaximumNumberTextField extends StatelessWidget {
+  final ValueChanged<String>? onMaximumNumberChanged;
+  const _MaximumNumberTextField({
+    required this.onMaximumNumberChanged,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextField(
+      onChanged: onMaximumNumberChanged,
+      initialValue: null,
+      hintText: "최댓값",
+      boxWidth: 80,
+    );
+  }
+}
+
+class _GenerationCount extends StatelessWidget {
+  final ValueChanged<String>? onCountChanged;
+  const _GenerationCount({
+    required this.onCountChanged,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextField(
+      onChanged: onCountChanged,
+      initialValue: null,
+      hintText: "생성 개수",
+      boxWidth: 100,
+    );
+  }
+}
+
+class _Duplication extends StatelessWidget {
+  const _Duplication({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "중복 숫자 허용",
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 22)
+        ),
+        Icon(Icons.check_box_outline_blank_rounded)
+      ],
+    );
+  }
+}
+
+
 class _MiddleButton extends StatelessWidget {
-  const _MiddleButton({super.key});
+  final VoidCallback onButtonPressed;
+  const _MiddleButton({
+    required this.onButtonPressed,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-        child: Text(
-          "생성 하기",
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-        ),
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => ResultScreen()),
-          );
-        });
+      child: Text(
+        "생성 하기",
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+      ),
+      onPressed: onButtonPressed,
+    );
   }
 }
 
@@ -185,12 +301,15 @@ class _BottomPicture extends StatelessWidget {
       children: [
         Image.asset('assets/img/home_screen.png'),
         Positioned(
-          top: 50,
-          right: 50,
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+          top: 52,
+          right: 42,
+          child: Container(
+            width: 330,
+            child: Center(
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+              ),
             ),
           ),
         ),

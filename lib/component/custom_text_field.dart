@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
+  final ValueChanged<String>? onChanged;
   final String? initialValue;
   final String hintText;
   final double boxWidth;
 
   const CustomTextField({
+    required this.onChanged,
     required this.boxWidth,
     required this.hintText,
     required this.initialValue,
@@ -27,6 +29,7 @@ class CustomTextField extends StatelessWidget {
         TextStyle(fontWeight: FontWeight.w600, fontSize: 24);
 
     return TextFormField(
+      onChanged: onChanged,
       style: customTextStyle.copyWith(color: Colors.black87),
       cursorColor: Colors.black87,
       maxLines: 1,
