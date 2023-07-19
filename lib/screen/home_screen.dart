@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:generating_random_number/component/custom_button.dart';
 import 'package:generating_random_number/component/custom_text_field.dart';
+import 'package:generating_random_number/const/colors.dart';
 import 'package:generating_random_number/screen/result_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final topTextureKey = GlobalKey();
   final middleButtonKey = GlobalKey();
   final stackKey = GlobalKey();
+  String currentText = '위에 입력하면 내가 숫자를 말해줄게!';
 
   @override
   Widget build(BuildContext context) {
@@ -35,22 +37,23 @@ class _HomeScreenState extends State<HomeScreen> {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
+          backgroundColor: WHITE_COLOR,
           body: SingleChildScrollView(
             child: Container(
               height: MediaQuery.of(context).size.height - 50,
               child: Column(
                 children: [
                   EmptySpaceHeight(),
-                  TopTexture(
+                  _TopTexture(
                     key: topTextureKey,
                   ),
                   EmptySpaceHeight(),
-                  MiddleButton(
+                  _MiddleButton(
                     key: middleButtonKey,
                   ),
                   EmptySpaceHeight(),
-                  BottomPicture(
-                      stackKey: stackKey, text: '위에 입력하면 내가 숫자를 말해줄게!'),
+                  _BottomPicture(
+                      stackKey: stackKey, text: currentText),
                   SizedBox(height: 20),
                 ],
               ),
@@ -82,8 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class TopTexture extends StatelessWidget {
-  const TopTexture({super.key});
+class _TopTexture extends StatelessWidget {
+  const _TopTexture({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +150,8 @@ class TopTexture extends StatelessWidget {
   }
 }
 
-class MiddleButton extends StatelessWidget {
-  const MiddleButton({super.key});
+class _MiddleButton extends StatelessWidget {
+  const _MiddleButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -165,11 +168,11 @@ class MiddleButton extends StatelessWidget {
   }
 }
 
-class BottomPicture extends StatelessWidget {
+class _BottomPicture extends StatelessWidget {
   final GlobalKey stackKey;
   final String text;
 
-  const BottomPicture({
+  const _BottomPicture({
     required this.stackKey,
     required this.text,
     super.key,
@@ -184,9 +187,11 @@ class BottomPicture extends StatelessWidget {
         Positioned(
           top: 50,
           right: 50,
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+            ),
           ),
         ),
       ],
