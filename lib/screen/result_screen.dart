@@ -1,15 +1,51 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:generating_random_number/component/custom_button.dart';
 import 'package:generating_random_number/const/colors.dart';
 
 class ResultScreen extends StatefulWidget {
-  const ResultScreen({super.key});
+  final String maximumNumber;
+  final String minimumNumber;
+  final int generationCount;
+  final bool isDuplicate;
+  const ResultScreen({
+    required this.maximumNumber,
+    required this.minimumNumber,
+    required this.generationCount,
+    required this.isDuplicate,
+    super.key,
+  });
 
   @override
   State<ResultScreen> createState() => _ResultScreenState();
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  late int maximumNumber;
+  late int minimumNumber;
+  List<int> randomNumbers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    maximumNumber = int.parse(widget.maximumNumber);
+    minimumNumber = int.parse(widget.minimumNumber);
+
+    if (widget.isDuplicate) {
+      for (int i = 0; i < widget.generationCount; i++) {
+        int randomNumber = Random().nextInt(maximumNumber) + minimumNumber;
+        randomNumbers.add(randomNumber);
+      }
+    } else {
+      while (randomNumbers.length < widget.generationCount) {
+        int randomNumber = Random().nextInt(maximumNumber) + minimumNumber;
+        if (!randomNumbers.contains(randomNumber)) {
+          randomNumbers.add(randomNumber);
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -18,12 +54,15 @@ class _ResultScreenState extends State<ResultScreen> {
         body: Column(
           children: [
             _ResultBox(
-              children: [
-                Text(
-                  ' 123 ',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 50),
-                ),
-              ],
+              children: randomNumbers
+                  .map(
+                    (e) => Text(
+                      ' $e ',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 50),
+                    ),
+                  )
+                  .toList(),
             ),
             _ReStartButton(),
             _BottomResultPicture(),

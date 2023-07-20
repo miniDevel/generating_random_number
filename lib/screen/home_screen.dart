@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? maximumNumber;
   String? minimumNumber;
   int? generationCount;
+  bool isDuplicate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   EmptySpaceHeight(),
                   _TopTexture(
+                    onBoxTap: onBoxTap,
+                    isDuplicate: isDuplicate,
                     onMinimumNumberChanged: onMinimumNumberChanged,
                     onCountChanged: onCountChanged,
                     onMaximumNumberChanged: onMaximumNumberChanged,
@@ -70,6 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  onBoxTap() {
+    setState(() {
+      isDuplicate = !isDuplicate;
+    });
+  }
+
   onButtonPressed() {
     if (minimumNumber == null ||
         maximumNumber == null ||
@@ -78,15 +87,12 @@ class _HomeScreenState extends State<HomeScreen> {
         currentText = '빈 칸을 전부 입력 해줘~';
       });
     } else {
-      int? min = int.tryParse(minimumNumber!);
-      int? max = int.tryParse(maximumNumber!);
+      int min = int.parse(minimumNumber!);
+      int max = int.parse(maximumNumber!);
 
-      if (min == null ||
-          max == null ||
-          min > max ||
-          max - min < generationCount!) {
+      if (min > max || max - min <= 0) {
         setState(() {
-          currentText = '너무 많이 만드는거 같아!';
+          currentText = '숫자가 이상해~';
         });
       } else {
         if (generationCount! <= 0) {
@@ -94,9 +100,21 @@ class _HomeScreenState extends State<HomeScreen> {
             currentText = '0개는 만들수 없어 ㅠ';
           });
         } else {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => ResultScreen()),
-          );
+          if (max - min < generationCount! - 1) {
+            setState(() {
+              currentText = '너무 많이 만드는거 같아!';
+            });
+          } else {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ResultScreen(
+                    maximumNumber: maximumNumber!,
+                    minimumNumber: minimumNumber!,
+                    generationCount: generationCount!,
+                    isDuplicate: isDuplicate),
+              ),
+            );
+          }
         }
       }
     }
@@ -104,15 +122,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   onMinimumNumberChanged(String? val) {
-    minimumNumber = val;
+    if (val!.isEmpty) {
+      minimumNumber = null;
+    } else {
+      minimumNumber = val;
+    }
   }
 
   onCountChanged(String? val) {
-    generationCount = int.parse(val!);
+    if (val!.isEmpty) {
+      generationCount = null;
+    } else {
+      generationCount = int.parse(val);
+    }
   }
 
   onMaximumNumberChanged(String? val) {
-    maximumNumber = val;
+    if (val!.isEmpty) {
+      maximumNumber = null;
+    } else {
+      maximumNumber = val;
+    }
   }
 
   double getTopTextureHeight() {
@@ -135,10 +165,14 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _TopTexture extends StatelessWidget {
+  final bool isDuplicate;
+  final GestureTapCallback onBoxTap;
   final ValueChanged<String>? onMinimumNumberChanged;
   final ValueChanged<String>? onMaximumNumberChanged;
   final ValueChanged<String>? onCountChanged;
   const _TopTexture({
+    required this.onBoxTap,
+    required this.isDuplicate,
     required this.onCountChanged,
     required this.onMaximumNumberChanged,
     required this.onMinimumNumberChanged,
@@ -186,7 +220,10 @@ class _TopTexture extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        _Duplication(),
+        _Duplication(
+          isDuplicate: isDuplicate,
+          onBoxTap: onBoxTap,
+        ),
       ],
     );
   }
@@ -247,7 +284,13 @@ class _GenerationCount extends StatelessWidget {
 }
 
 class _Duplication extends StatelessWidget {
-  const _Duplication({super.key});
+  final bool isDuplicate;
+  final GestureTapCallback onBoxTap;
+  const _Duplication({
+    required this.isDuplicate,
+    required this.onBoxTap,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -256,14 +299,31 @@ class _Duplication extends StatelessWidget {
       children: [
         Text(
           "중복 숫자 허용",
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 22)
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 22,
+            height: 1,
+          ),
         ),
-        Icon(Icons.check_box_outline_blank_rounded)
+        SizedBox(width: 4),
+        GestureDetector(
+          onTap: onBoxTap,
+          child: Container(
+            child: isDuplicate
+                ? Icon(
+                    Icons.check_box_outlined,
+                    size: 30,
+                  )
+                : Icon(
+                    Icons.check_box_outline_blank_rounded,
+                    size: 30,
+                  ),
+          ),
+        )
       ],
     );
   }
 }
-
 
 class _MiddleButton extends StatelessWidget {
   final VoidCallback onButtonPressed;
