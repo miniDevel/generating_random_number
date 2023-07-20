@@ -33,12 +33,12 @@ class _ResultScreenState extends State<ResultScreen> {
 
     if (widget.isDuplicate) {
       for (int i = 0; i < widget.generationCount; i++) {
-        int randomNumber = Random().nextInt(maximumNumber) + minimumNumber;
+        int randomNumber = Random().nextInt(maximumNumber-minimumNumber+1) + minimumNumber;
         randomNumbers.add(randomNumber);
       }
     } else {
       while (randomNumbers.length < widget.generationCount) {
-        int randomNumber = Random().nextInt(maximumNumber) + minimumNumber;
+        int randomNumber = Random().nextInt(maximumNumber-minimumNumber+1) + minimumNumber;
         if (!randomNumbers.contains(randomNumber)) {
           randomNumbers.add(randomNumber);
         }
