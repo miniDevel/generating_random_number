@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
         getMiddleButtonHeight() -
         getStackHeight());
 
-    SizedBox EmptySpaceHeight() {
+    Widget EmptySpaceHeight() {
       return SizedBox(
         height: emptySpaceHeight / 3,
       );
@@ -43,9 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           backgroundColor: WHITE_COLOR,
           body: SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height - 50,
-              child: Column(
+            child: Column(
                 children: [
                   EmptySpaceHeight(),
                   _TopTexture(
@@ -66,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 20),
                 ],
               ),
-            ),
+
           ),
         ),
       ),
@@ -113,7 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     generationCount: generationCount!,
                     isDuplicate: isDuplicate),
               ),
-            );
+            ).then((value) {
+              if(value != null){
+                setState(() {
+                  currentText = value;
+                });
+              }
+            });
           }
         }
       }

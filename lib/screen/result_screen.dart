@@ -40,7 +40,7 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
     loadingText = loadingTexts[Random().nextInt(loadingTexts.length)];
 
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(milliseconds: 1500), () {
       setState(() {
         isLoading = false;
       });
@@ -167,7 +167,7 @@ class _Buttons extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop('다시 해볼까?');
             },
           ),
         ],
