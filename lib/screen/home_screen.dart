@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:generating_random_number/component/custom_button.dart';
-import 'package:generating_random_number/component/custom_text_field.dart';
+import 'package:generating_random_number/component/choose_butteon.dart';
+import 'package:generating_random_number/component/top_number_texture.dart';
 import 'package:generating_random_number/const/colors.dart';
 import 'package:generating_random_number/screen/result_screen.dart';
 
@@ -15,25 +15,21 @@ class _HomeScreenState extends State<HomeScreen> {
   final topTextureKey = GlobalKey();
   final middleButtonKey = GlobalKey();
   final stackKey = GlobalKey();
-  String currentText = '위에 입력하면 내가 숫자를 말해줄게!';
+  String currentText = '어떤걸 도와줄까?';
   String? maximumNumber;
   String? minimumNumber;
   int? generationCount;
   bool isDuplicate = false;
+  bool? isGeneratingNumbers;
 
   @override
   Widget build(BuildContext context) {
-    final emptySpaceHeight = (MediaQuery.of(context).size.height -
-        70 -
-        getTopTextureHeight() -
-        getMiddleButtonHeight() -
-        getStackHeight());
-
-    Widget EmptySpaceHeight() {
-      return SizedBox(
-        height: emptySpaceHeight / 3,
-      );
-    }
+    final emptySpaceHeight = ((MediaQuery.of(context).size.height -
+            70 -
+            getTopTextureHeight() -
+            getMiddleButtonHeight() -
+            getStackHeight())) /
+        3;
 
     return SafeArea(
       child: GestureDetector(
@@ -44,40 +40,66 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: WHITE_COLOR,
           body: SingleChildScrollView(
             child: Column(
-                children: [
-                  EmptySpaceHeight(),
-                  _TopTexture(
-                    onBoxTap: onBoxTap,
-                    isDuplicate: isDuplicate,
-                    onMinimumNumberChanged: onMinimumNumberChanged,
-                    onCountChanged: onCountChanged,
-                    onMaximumNumberChanged: onMaximumNumberChanged,
-                    key: topTextureKey,
-                  ),
-                  EmptySpaceHeight(),
-                  _MiddleButton(
-                    onButtonPressed: onButtonPressed,
-                    key: middleButtonKey,
-                  ),
-                  EmptySpaceHeight(),
-                  _BottomPicture(stackKey: stackKey, text: currentText),
-                  SizedBox(height: 20),
-                ],
-              ),
-
+              children: [
+                isGeneratingNumbers == null
+                    ? ChooseButton(
+                        onTopPressed: () {
+                          setState(() {
+                            currentText = '위에 입력하면 내가 숫자를 말해줄게!';
+                            isGeneratingNumbers = true;
+                          });
+                        },
+                        topLabel: "랜덤숫자생성",
+                        onBottomPressed: () {
+                          currentText = '리스트를 작성하면 내가 골라줄게!';
+                          isGeneratingNumbers = false;
+                        },
+                        bottomLabel: "리스트만들기",
+                        topSpaceHeight: emptySpaceHeight,
+                        bottomSpaceHeight: emptySpaceHeight * 2,
+                      )
+                    : SizedBox(),
+                isGeneratingNumbers == null
+                    ? SizedBox()
+                    : !isGeneratingNumbers!
+                        ? TopNumberTexture(
+                            isDuplicate: isDuplicate,
+                            onDuplicationBoxTap: onDuplicationBoxTap,
+                            onButtonPressed: onNumberGenerationButtonPressed,
+                            onMaximumNumberChanged: onMaximumNumberChanged,
+                            onCountChanged: onCountChanged,
+                            onMinimumNumberChanged: onMinimumNumberChanged,
+                            emptySpaceHeight: emptySpaceHeight,
+                            topTextureKey: topTextureKey,
+                            middleButtonKey: middleButtonKey,
+                          )
+                        : TopNumberTexture(
+                            isDuplicate: isDuplicate,
+                            onDuplicationBoxTap: onDuplicationBoxTap,
+                            onButtonPressed: onNumberGenerationButtonPressed,
+                            onMaximumNumberChanged: onMaximumNumberChanged,
+                            onCountChanged: onCountChanged,
+                            onMinimumNumberChanged: onMinimumNumberChanged,
+                            emptySpaceHeight: emptySpaceHeight,
+                            middleButtonKey: middleButtonKey,
+                            topTextureKey: topTextureKey),
+                _BottomPicture(stackKey: stackKey, text: currentText),
+                SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  onBoxTap() {
+  onDuplicationBoxTap() {
     setState(() {
       isDuplicate = !isDuplicate;
     });
   }
 
-  onButtonPressed() {
+  onNumberGenerationButtonPressed() {
     if (minimumNumber == null ||
         maximumNumber == null ||
         generationCount == null) {
@@ -103,7 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
               currentText = '너무 많이 만드는거 같아!';
             });
           } else {
-            Navigator.of(context).push(
+            Navigator.of(context)
+                .push(
               MaterialPageRoute(
                 builder: (_) => ResultScreen(
                     maximumNumber: maximumNumber!,
@@ -111,8 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     generationCount: generationCount!,
                     isDuplicate: isDuplicate),
               ),
-            ).then((value) {
-              if(value != null){
+            )
+                .then((value) {
+              if (value != null) {
                 setState(() {
                   currentText = value;
                 });
@@ -165,186 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final RenderBox? renderBox =
         stackKey.currentContext?.findRenderObject() as RenderBox?;
     return renderBox?.size.height ?? 0.0;
-  }
-}
-
-class _TopTexture extends StatelessWidget {
-  final bool isDuplicate;
-  final GestureTapCallback onBoxTap;
-  final ValueChanged<String>? onMinimumNumberChanged;
-  final ValueChanged<String>? onMaximumNumberChanged;
-  final ValueChanged<String>? onCountChanged;
-  const _TopTexture({
-    required this.onBoxTap,
-    required this.isDuplicate,
-    required this.onCountChanged,
-    required this.onMaximumNumberChanged,
-    required this.onMinimumNumberChanged,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    TextStyle customTextStyle =
-        TextStyle(fontWeight: FontWeight.w600, fontSize: 30);
-
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _MinimumNumberTextField(
-              onMinimumNumberChanged: onMinimumNumberChanged,
-            ),
-            Text(
-              " 에서  ",
-              style: customTextStyle,
-            ),
-            _MaximumNumberTextField(
-              onMaximumNumberChanged: onMaximumNumberChanged,
-            ),
-            Text(
-              " 까지",
-              style: customTextStyle,
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _GenerationCount(
-              onCountChanged: onCountChanged,
-            ),
-            Text(
-              " 개 숫자 생성!",
-              style: customTextStyle,
-            )
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        _Duplication(
-          isDuplicate: isDuplicate,
-          onBoxTap: onBoxTap,
-        ),
-      ],
-    );
-  }
-}
-
-class _MinimumNumberTextField extends StatelessWidget {
-  final ValueChanged<String>? onMinimumNumberChanged;
-  const _MinimumNumberTextField({
-    required this.onMinimumNumberChanged,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomTextField(
-      onChanged: onMinimumNumberChanged,
-      initialValue: null,
-      hintText: "최솟값",
-      boxWidth: 80,
-    );
-  }
-}
-
-class _MaximumNumberTextField extends StatelessWidget {
-  final ValueChanged<String>? onMaximumNumberChanged;
-  const _MaximumNumberTextField({
-    required this.onMaximumNumberChanged,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomTextField(
-      onChanged: onMaximumNumberChanged,
-      initialValue: null,
-      hintText: "최댓값",
-      boxWidth: 80,
-    );
-  }
-}
-
-class _GenerationCount extends StatelessWidget {
-  final ValueChanged<String>? onCountChanged;
-  const _GenerationCount({
-    required this.onCountChanged,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomTextField(
-      onChanged: onCountChanged,
-      initialValue: null,
-      hintText: "생성 개수",
-      boxWidth: 100,
-    );
-  }
-}
-
-class _Duplication extends StatelessWidget {
-  final bool isDuplicate;
-  final GestureTapCallback onBoxTap;
-  const _Duplication({
-    required this.isDuplicate,
-    required this.onBoxTap,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "중복 숫자 허용",
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 22,
-            height: 1,
-          ),
-        ),
-        SizedBox(width: 4),
-        GestureDetector(
-          onTap: onBoxTap,
-          child: Container(
-            child: isDuplicate
-                ? Icon(
-                    Icons.check_box_outlined,
-                    size: 30,
-                  )
-                : Icon(
-                    Icons.check_box_outline_blank_rounded,
-                    size: 30,
-                  ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class _MiddleButton extends StatelessWidget {
-  final VoidCallback onButtonPressed;
-  const _MiddleButton({
-    required this.onButtonPressed,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomButton(
-      child: Text(
-        "생성 하기",
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-      ),
-      onPressed: onButtonPressed,
-    );
   }
 }
 

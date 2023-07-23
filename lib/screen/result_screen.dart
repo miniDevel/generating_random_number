@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:generating_random_number/component/custom_button.dart';
 import 'package:generating_random_number/const/colors.dart';
+import 'package:generating_random_number/const/custom_button.dart';
 
 class ResultScreen extends StatefulWidget {
   final String maximumNumber;
@@ -95,7 +95,7 @@ class _ResultScreenState extends State<ResultScreen> {
             ),
             isLoading
                 ? SizedBox(height: 48)
-                : _Buttons(
+                : Buttons(
                     onRangePressed: onRangePressed,
                   ),
             _BottomResultPicture(
@@ -117,64 +117,7 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 }
 
-class _Buttons extends StatelessWidget {
-  final VoidCallback onRangePressed;
 
-  const _Buttons({
-    required this.onRangePressed,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    double buttonWidth = MediaQuery.of(context).size.width / 4;
-    TextStyle customTextStyle =
-        TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          CustomButton(
-            child: Container(
-              width: buttonWidth,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "정리하기 ",
-                    style: customTextStyle,
-                  ),
-                  Icon(Icons.date_range),
-                ],
-              ),
-            ),
-            onPressed: onRangePressed,
-          ),
-          CustomButton(
-            child: Container(
-              width: buttonWidth,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "다시하기 ",
-                    style: customTextStyle,
-                  ),
-                  Icon(Icons.refresh),
-                ],
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop('다시 해볼까?');
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _ResultBox extends StatelessWidget {
   final List<Text> children;
@@ -264,6 +207,65 @@ class _BottomResultPicture extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class Buttons extends StatelessWidget {
+  final VoidCallback onRangePressed;
+
+  const Buttons({
+    required this.onRangePressed,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double buttonWidth = MediaQuery.of(context).size.width / 4;
+    TextStyle customTextStyle =
+    TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          CustomButton(
+            child: Container(
+              width: buttonWidth,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "정리하기 ",
+                    style: customTextStyle,
+                  ),
+                  Icon(Icons.date_range),
+                ],
+              ),
+            ),
+            onPressed: onRangePressed,
+          ),
+          CustomButton(
+            child: Container(
+              width: buttonWidth,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "다시하기 ",
+                    style: customTextStyle,
+                  ),
+                  Icon(Icons.refresh),
+                ],
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop('다시 해볼까?');
+            },
+          ),
+        ],
+      ),
     );
   }
 }
