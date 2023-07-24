@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:generating_random_number/component/choose_butteon.dart';
-import 'package:generating_random_number/component/top_number_texture.dart';
+import 'package:generating_random_number/component/top_list_generator.dart';
+import 'package:generating_random_number/component/top_number_generator.dart';
 import 'package:generating_random_number/const/colors.dart';
 import 'package:generating_random_number/screen/result_screen.dart';
 
@@ -12,25 +13,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final topTextureKey = GlobalKey();
-  final middleButtonKey = GlobalKey();
-  final stackKey = GlobalKey();
   String currentText = '어떤걸 도와줄까?';
   String? maximumNumber;
   String? minimumNumber;
   int? generationCount;
   bool isDuplicate = false;
   bool? isGeneratingNumbers;
+  final String selectedLabelText = '리스트를 작성하면 내가 골라줄게!';
+  final String selectedNumberText = "위에 입력하면 내가 숫자를 말해줄게!";
 
   @override
   Widget build(BuildContext context) {
-    final emptySpaceHeight = ((MediaQuery.of(context).size.height -
-            70 -
-            getTopTextureHeight() -
-            getMiddleButtonHeight() -
-            getStackHeight())) /
-        3;
-
     return SafeArea(
       child: GestureDetector(
         onTap: () {
@@ -39,53 +32,43 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           backgroundColor: WHITE_COLOR,
           body: SingleChildScrollView(
-            child: Column(
-              children: [
-                isGeneratingNumbers == null
-                    ? ChooseButton(
-                        onTopPressed: () {
-                          setState(() {
-                            currentText = '위에 입력하면 내가 숫자를 말해줄게!';
-                            isGeneratingNumbers = true;
-                          });
-                        },
-                        topLabel: "랜덤숫자생성",
-                        onBottomPressed: () {
-                          currentText = '리스트를 작성하면 내가 골라줄게!';
-                          isGeneratingNumbers = false;
-                        },
-                        bottomLabel: "리스트만들기",
-                        topSpaceHeight: emptySpaceHeight,
-                        bottomSpaceHeight: emptySpaceHeight * 2,
-                      )
-                    : SizedBox(),
-                isGeneratingNumbers == null
-                    ? SizedBox()
-                    : !isGeneratingNumbers!
-                        ? TopNumberTexture(
-                            isDuplicate: isDuplicate,
-                            onDuplicationBoxTap: onDuplicationBoxTap,
-                            onButtonPressed: onNumberGenerationButtonPressed,
-                            onMaximumNumberChanged: onMaximumNumberChanged,
-                            onCountChanged: onCountChanged,
-                            onMinimumNumberChanged: onMinimumNumberChanged,
-                            emptySpaceHeight: emptySpaceHeight,
-                            topTextureKey: topTextureKey,
-                            middleButtonKey: middleButtonKey,
-                          )
-                        : TopNumberTexture(
-                            isDuplicate: isDuplicate,
-                            onDuplicationBoxTap: onDuplicationBoxTap,
-                            onButtonPressed: onNumberGenerationButtonPressed,
-                            onMaximumNumberChanged: onMaximumNumberChanged,
-                            onCountChanged: onCountChanged,
-                            onMinimumNumberChanged: onMinimumNumberChanged,
-                            emptySpaceHeight: emptySpaceHeight,
-                            middleButtonKey: middleButtonKey,
-                            topTextureKey: topTextureKey),
-                _BottomPicture(stackKey: stackKey, text: currentText),
-                SizedBox(height: 20),
-              ],
+            child: Container(
+              height: MediaQuery.of(context).size.height - 50,
+              child: Column(
+                children: [
+                  EmptySpace(3),
+                  isGeneratingNumbers == null
+                      ? ChooseButton(
+                          onTopPressed: onTopPressed,
+                          topLabel: "랜덤숫자생성",
+                          onBottomPressed: onBottomPressed,
+                          bottomLabel: "리스트만들기",
+                        )
+                      : SizedBox(),
+                  isGeneratingNumbers == null
+                      ? SizedBox()
+                      : !isGeneratingNumbers!
+                          ? TopListGenerator(
+                              onGenerateButtonPressed: onGenerateButtonPressed,
+                              onModeChangeButtonPressed:
+                                  onModeChangeButtonPressed,
+                            )
+                          : TopNumberGenerator(
+                              isDuplicate: isDuplicate,
+                              onDuplicationBoxTap: onDuplicationBoxTap,
+                              onGenerateButtonPressed:
+                                  onNumberGenerationButtonPressed,
+                              onModeChangeButtonPressed:
+                                  onModeChangeButtonPressed,
+                              onMaximumNumberChanged: onMaximumNumberChanged,
+                              onCountChanged: onCountChanged,
+                              onMinimumNumberChanged: onMinimumNumberChanged,
+                            ),
+                  EmptySpace(2),
+                  _BottomPicture(text: currentText),
+                  SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),
@@ -93,9 +76,36 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  onTopPressed() {
+    setState(() {
+      currentText = selectedNumberText;
+      isGeneratingNumbers = true;
+    });
+  }
+
+  onBottomPressed() {
+    setState(() {
+      currentText = selectedLabelText;
+      isGeneratingNumbers = false;
+    });
+  }
+
   onDuplicationBoxTap() {
     setState(() {
       isDuplicate = !isDuplicate;
+    });
+  }
+
+  onGenerateButtonPressed() {}
+
+  onModeChangeButtonPressed() {
+    setState(() {
+      isGeneratingNumbers = !isGeneratingNumbers!;
+      if (isGeneratingNumbers!) {
+        currentText = selectedNumberText;
+      } else {
+        currentText = selectedLabelText;
+      }
     });
   }
 
@@ -172,32 +182,19 @@ class _HomeScreenState extends State<HomeScreen> {
       maximumNumber = val;
     }
   }
+}
 
-  double getTopTextureHeight() {
-    final RenderBox? renderBox =
-        topTextureKey.currentContext?.findRenderObject() as RenderBox?;
-    return renderBox?.size.height ?? 0.0;
-  }
-
-  double getMiddleButtonHeight() {
-    final RenderBox? renderBox =
-        middleButtonKey.currentContext?.findRenderObject() as RenderBox?;
-    return renderBox?.size.height ?? 0.0;
-  }
-
-  double getStackHeight() {
-    final RenderBox? renderBox =
-        stackKey.currentContext?.findRenderObject() as RenderBox?;
-    return renderBox?.size.height ?? 0.0;
-  }
+Widget EmptySpace(int flex) {
+  return Expanded(
+    flex: flex,
+    child: SizedBox(),
+  );
 }
 
 class _BottomPicture extends StatelessWidget {
-  final GlobalKey stackKey;
   final String text;
 
   const _BottomPicture({
-    required this.stackKey,
     required this.text,
     super.key,
   });
@@ -205,7 +202,6 @@ class _BottomPicture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      key: stackKey,
       children: [
         Image.asset('assets/img/home_screen.png'),
         Positioned(

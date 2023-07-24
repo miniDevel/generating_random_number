@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:generating_random_number/const/custom_button.dart';
-import 'package:generating_random_number/component/custom_text_field.dart';
+import 'package:generating_random_number/const/custom_text_field.dart';
+import 'package:generating_random_number/const/middle_button.dart';
 
-class TopNumberTexture extends StatelessWidget {
-  final double emptySpaceHeight;
+class TopNumberGenerator extends StatelessWidget {
   final bool isDuplicate;
   final GestureTapCallback onDuplicationBoxTap;
   final ValueChanged<String>? onMinimumNumberChanged;
   final ValueChanged<String>? onMaximumNumberChanged;
   final ValueChanged<String>? onCountChanged;
-  final VoidCallback onButtonPressed;
-  final GlobalKey topTextureKey;
-  final GlobalKey middleButtonKey;
-  const TopNumberTexture({
+  final VoidCallback onGenerateButtonPressed;
+  final VoidCallback onModeChangeButtonPressed;
+
+  const TopNumberGenerator({
+    required this.onModeChangeButtonPressed,
     required this.isDuplicate,
     required this.onDuplicationBoxTap,
-    required this.onButtonPressed,
+    required this.onGenerateButtonPressed,
     required this.onMaximumNumberChanged,
     required this.onCountChanged,
     required this.onMinimumNumberChanged,
-    required this.emptySpaceHeight,
-    required this.middleButtonKey,
-    required this.topTextureKey,
     super.key,
   });
 
@@ -29,26 +26,19 @@ class TopNumberTexture extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: emptySpaceHeight,
-        ),
         _TopEnterNumber(
           onDuplicationBoxTap: onDuplicationBoxTap,
           isDuplicate: isDuplicate,
           onMinimumNumberChanged: onMinimumNumberChanged,
           onCountChanged: onCountChanged,
           onMaximumNumberChanged: onMaximumNumberChanged,
-          key: topTextureKey,
         ),
         SizedBox(
-          height: emptySpaceHeight,
+          height: 40,
         ),
-        _MiddleButton(
-          onButtonPressed: onButtonPressed,
-          key: middleButtonKey,
-        ),
-        SizedBox(
-          height: emptySpaceHeight,
+        MiddleButton(
+          onGenerateButtonPressed: onGenerateButtonPressed,
+          onModeChangeButtonPressed: onModeChangeButtonPressed,
         ),
       ],
     );
@@ -73,7 +63,7 @@ class _TopEnterNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle customTextStyle =
-    TextStyle(fontWeight: FontWeight.w600, fontSize: 30);
+        TextStyle(fontWeight: FontWeight.w600, fontSize: 30);
 
     return Column(
       children: [
@@ -120,24 +110,6 @@ class _TopEnterNumber extends StatelessWidget {
   }
 }
 
-class _MiddleButton extends StatelessWidget {
-  final VoidCallback onButtonPressed;
-  const _MiddleButton({
-    required this.onButtonPressed,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomButton(
-      child: Text(
-        "생성 하기",
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-      ),
-      onPressed: onButtonPressed,
-    );
-  }
-}
 
 class _Duplication extends StatelessWidget {
   final bool isDuplicate;
@@ -167,13 +139,13 @@ class _Duplication extends StatelessWidget {
           child: Container(
             child: isDuplicate
                 ? Icon(
-              Icons.check_box_outlined,
-              size: 30,
-            )
+                    Icons.check_box_outlined,
+                    size: 30,
+                  )
                 : Icon(
-              Icons.check_box_outline_blank_rounded,
-              size: 30,
-            ),
+                    Icons.check_box_outline_blank_rounded,
+                    size: 30,
+                  ),
           ),
         )
       ],

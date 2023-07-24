@@ -6,15 +6,12 @@ class ChooseButton extends StatelessWidget {
   final String bottomLabel;
   final VoidCallback onTopPressed;
   final VoidCallback onBottomPressed;
-  final double bottomSpaceHeight;
-  final double topSpaceHeight;
+
   const ChooseButton({
     required this.onBottomPressed,
     required this.bottomLabel,
     required this.onTopPressed,
     required this.topLabel,
-    required this.bottomSpaceHeight,
-    required this.topSpaceHeight,
     super.key,
   });
 
@@ -22,25 +19,44 @@ class ChooseButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: topSpaceHeight,
-        ),
         Column(
           children: [
-            CustomButton(
-              child: Text(topLabel),
+            ModeSelectButton(
               onPressed: onTopPressed,
+              label: topLabel,
             ),
-            CustomButton(
-              child: Text(bottomLabel),
+            SizedBox(height: 20),
+            ModeSelectButton(
               onPressed: onBottomPressed,
+              label: bottomLabel,
             ),
           ],
         ),
-        SizedBox(
-          height: bottomSpaceHeight,
-        )
       ],
+    );
+  }
+}
+
+class ModeSelectButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+  const ModeSelectButton({
+    required this.onPressed,
+    required this.label,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final TextStyle customTextStyle =
+        TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+
+    return CustomButton(
+      child: Text(
+        label,
+        style: customTextStyle,
+      ),
+      onPressed: onPressed,
     );
   }
 }
