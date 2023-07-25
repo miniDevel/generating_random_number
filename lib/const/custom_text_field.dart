@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
+  final bool isNumbers;
   final ValueChanged<String>? onChanged;
   final String? initialValue;
   final String hintText;
   final double boxWidth;
 
   const CustomTextField({
+    required this.isNumbers,
     required this.onChanged,
     required this.boxWidth,
     required this.hintText,
@@ -35,8 +37,9 @@ class CustomTextField extends StatelessWidget {
       maxLines: 1,
       textAlign: TextAlign.center,
       initialValue: initialValue,
-      keyboardType: TextInputType.number,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      keyboardType: isNumbers ? TextInputType.number : TextInputType.text,
+      inputFormatters:
+          isNumbers ? [FilteringTextInputFormatter.digitsOnly] : null,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.only(bottom: 8),
           hintText: hintText,

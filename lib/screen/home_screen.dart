@@ -3,6 +3,7 @@ import 'package:generating_random_number/component/choose_butteon.dart';
 import 'package:generating_random_number/component/top_list_generator.dart';
 import 'package:generating_random_number/component/top_number_generator.dart';
 import 'package:generating_random_number/const/colors.dart';
+import 'package:generating_random_number/const/custom_text_field.dart';
 import 'package:generating_random_number/screen/result_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,51 +25,78 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: Scaffold(
-          backgroundColor: WHITE_COLOR,
-          body: SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height - 50,
-              child: Column(
-                children: [
-                  EmptySpace(3),
-                  isGeneratingNumbers == null
-                      ? ChooseButton(
-                          onTopPressed: onTopPressed,
-                          topLabel: "랜덤숫자생성",
-                          onBottomPressed: onBottomPressed,
-                          bottomLabel: "리스트만들기",
-                        )
-                      : SizedBox(),
-                  isGeneratingNumbers == null
-                      ? SizedBox()
-                      : !isGeneratingNumbers!
-                          ? TopListGenerator(
-                              onGenerateButtonPressed: onGenerateButtonPressed,
-                              onModeChangeButtonPressed:
-                                  onModeChangeButtonPressed,
-                            )
-                          : TopNumberGenerator(
-                              isDuplicate: isDuplicate,
-                              onDuplicationBoxTap: onDuplicationBoxTap,
-                              onGenerateButtonPressed:
-                                  onNumberGenerationButtonPressed,
-                              onModeChangeButtonPressed:
-                                  onModeChangeButtonPressed,
-                              onMaximumNumberChanged: onMaximumNumberChanged,
-                              onCountChanged: onCountChanged,
-                              onMinimumNumberChanged: onMinimumNumberChanged,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        backgroundColor: WHITE_COLOR,
+        body: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [
+                isGeneratingNumbers == null || isGeneratingNumbers!
+                    ? EmptySpace(3)
+                    : SizedBox(),
+                isGeneratingNumbers == null
+                    ? ChooseButton(
+                        onTopPressed: onTopPressed,
+                        topLabel: "랜덤숫자생성",
+                        onBottomPressed: onBottomPressed,
+                        bottomLabel: "리스트만들기",
+                      )
+                    : SizedBox(),
+                isGeneratingNumbers == null
+                    ? SizedBox()
+                    : !isGeneratingNumbers!
+                        ? TopListGenerator(
+                            listGenerator: Row(
+                              children: [
+                                Text(
+                                  '1. ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 24,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: CustomTextField(
+                                    onChanged: (String val) {},
+                                    boxWidth: double.infinity,
+                                    hintText: '내용을 적어주세요',
+                                    initialValue: null,
+                                    isNumbers: false,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.close),
+                                )
+                              ],
                             ),
-                  EmptySpace(2),
-                  _BottomPicture(text: currentText),
-                  SizedBox(height: 20),
-                ],
-              ),
+                            onGenerateButtonPressed: onGenerateButtonPressed,
+                            onModeChangeButtonPressed:
+                                onModeChangeButtonPressed,
+                          )
+                        : TopNumberGenerator(
+                            isDuplicate: isDuplicate,
+                            onDuplicationBoxTap: onDuplicationBoxTap,
+                            onGenerateButtonPressed:
+                                onNumberGenerationButtonPressed,
+                            onModeChangeButtonPressed:
+                                onModeChangeButtonPressed,
+                            onMaximumNumberChanged: onMaximumNumberChanged,
+                            onCountChanged: onCountChanged,
+                            onMinimumNumberChanged: onMinimumNumberChanged,
+                          ),
+                isGeneratingNumbers == null || isGeneratingNumbers!
+                    ? EmptySpace(2)
+                    : SizedBox(),
+                _BottomPicture(text: currentText),
+                SizedBox(height: 20),
+              ],
             ),
           ),
         ),
@@ -106,6 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         currentText = selectedLabelText;
       }
+      maximumNumber = null;
+      minimumNumber = null;
+      generationCount = null;
     });
   }
 

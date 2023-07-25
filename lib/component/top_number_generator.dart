@@ -110,7 +110,6 @@ class _TopEnterNumber extends StatelessWidget {
   }
 }
 
-
 class _Duplication extends StatelessWidget {
   final bool isDuplicate;
   final GestureTapCallback onBoxTap;
@@ -167,6 +166,7 @@ class _MinimumNumberTextField extends StatelessWidget {
       initialValue: null,
       hintText: "최솟값",
       boxWidth: 80,
+      isNumbers: true,
     );
   }
 }
@@ -185,6 +185,7 @@ class _MaximumNumberTextField extends StatelessWidget {
       initialValue: null,
       hintText: "최댓값",
       boxWidth: 80,
+      isNumbers: true,
     );
   }
 }
@@ -203,6 +204,7 @@ class _GenerationCount extends StatelessWidget {
       initialValue: null,
       hintText: "생성 개수",
       boxWidth: 100,
+      isNumbers: true,
     );
   }
 }
