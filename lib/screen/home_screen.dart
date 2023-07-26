@@ -3,7 +3,9 @@ import 'package:generating_random_number/component/choose_butteon.dart';
 import 'package:generating_random_number/component/top_list_generator.dart';
 import 'package:generating_random_number/component/top_number_generator.dart';
 import 'package:generating_random_number/const/colors.dart';
+import 'package:generating_random_number/const/custom_button.dart';
 import 'package:generating_random_number/const/custom_text_field.dart';
+import 'package:generating_random_number/const/middle_button.dart';
 import 'package:generating_random_number/screen/result_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,51 +52,63 @@ class _HomeScreenState extends State<HomeScreen> {
                 isGeneratingNumbers == null
                     ? SizedBox()
                     : !isGeneratingNumbers!
-                        ? TopListGenerator(
-                            listGenerator: Row(
+                        ? Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  '1. ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 24,
-                                    color: Colors.black87,
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      '1. ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 24,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    CustomTextField(
+                                      onChanged: (String val) {},
+                                      boxWidth:
+                                          MediaQuery.of(context).size.width /
+                                              3 *
+                                              2,
+                                      hintText: '내용을 적어주세요',
+                                      initialValue: null,
+                                      isNumbers: false,
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.close),
+                                    )
+                                  ],
                                 ),
-                                Expanded(
-                                  child: CustomTextField(
-                                    onChanged: (String val) {},
-                                    boxWidth: double.infinity,
-                                    hintText: '내용을 적어주세요',
-                                    initialValue: null,
-                                    isNumbers: false,
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.close),
-                                )
+                                IconButton(onPressed: (){}, icon: Icon(Icons.add),)
                               ],
                             ),
-                            onGenerateButtonPressed: onGenerateButtonPressed,
-                            onModeChangeButtonPressed:
-                                onModeChangeButtonPressed,
                           )
                         : TopNumberGenerator(
                             isDuplicate: isDuplicate,
                             onDuplicationBoxTap: onDuplicationBoxTap,
-                            onGenerateButtonPressed:
-                                onNumberGenerationButtonPressed,
-                            onModeChangeButtonPressed:
-                                onModeChangeButtonPressed,
                             onMaximumNumberChanged: onMaximumNumberChanged,
                             onCountChanged: onCountChanged,
                             onMinimumNumberChanged: onMinimumNumberChanged,
                           ),
+                isGeneratingNumbers != null
+                    ? MiddleButton(
+                        onGenerateButtonPressed: isGeneratingNumbers!
+                            ? onNumberGenerateButtonPressed
+                            : onListGenerateButtonPressed,
+                        onModeChangeButtonPressed: onModeChangeButtonPressed,
+                      )
+                    : SizedBox(),
                 isGeneratingNumbers == null || isGeneratingNumbers!
                     ? EmptySpace(2)
                     : SizedBox(),
-                _BottomPicture(text: currentText),
+                Container(child: _BottomPicture(text: currentText)),
                 SizedBox(height: 20),
               ],
             ),
@@ -124,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  onGenerateButtonPressed() {}
+  onListGenerateButtonPressed() {}
 
   onModeChangeButtonPressed() {
     setState(() {
@@ -140,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  onNumberGenerationButtonPressed() {
+  onNumberGenerateButtonPressed() {
     if (minimumNumber == null ||
         maximumNumber == null ||
         generationCount == null) {
@@ -218,7 +232,10 @@ class _HomeScreenState extends State<HomeScreen> {
 Widget EmptySpace(int flex) {
   return Expanded(
     flex: flex,
-    child: SizedBox(),
+    child: Container(
+        child: SizedBox(
+      width: 50,
+    )),
   );
 }
 

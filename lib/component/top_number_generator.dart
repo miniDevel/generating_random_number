@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:generating_random_number/const/custom_text_field.dart';
-import 'package:generating_random_number/const/middle_button.dart';
+
 
 class TopNumberGenerator extends StatelessWidget {
   final bool isDuplicate;
@@ -8,14 +8,10 @@ class TopNumberGenerator extends StatelessWidget {
   final ValueChanged<String>? onMinimumNumberChanged;
   final ValueChanged<String>? onMaximumNumberChanged;
   final ValueChanged<String>? onCountChanged;
-  final VoidCallback onGenerateButtonPressed;
-  final VoidCallback onModeChangeButtonPressed;
 
   const TopNumberGenerator({
-    required this.onModeChangeButtonPressed,
     required this.isDuplicate,
     required this.onDuplicationBoxTap,
-    required this.onGenerateButtonPressed,
     required this.onMaximumNumberChanged,
     required this.onCountChanged,
     required this.onMinimumNumberChanged,
@@ -36,10 +32,7 @@ class TopNumberGenerator extends StatelessWidget {
         SizedBox(
           height: 40,
         ),
-        MiddleButton(
-          onGenerateButtonPressed: onGenerateButtonPressed,
-          onModeChangeButtonPressed: onModeChangeButtonPressed,
-        ),
+
       ],
     );
   }
