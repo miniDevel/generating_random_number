@@ -53,41 +53,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? SizedBox()
                     : !isGeneratingNumbers!
                         ? Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                            child: Center(
+                              child: SingleChildScrollView(
+                                child: Column(
                                   children: [
                                     SizedBox(
-                                      width: 20,
+                                      height: 30,
                                     ),
-                                    Text(
-                                      '1. ',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 24,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    CustomTextField(
-                                      onChanged: (String val) {},
-                                      boxWidth:
-                                          MediaQuery.of(context).size.width /
-                                              3 *
-                                              2,
-                                      hintText: '내용을 적어주세요',
-                                      initialValue: null,
-                                      isNumbers: false,
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Label(),
+                                      ],
                                     ),
                                     IconButton(
                                       onPressed: () {},
-                                      icon: Icon(Icons.close),
-                                    )
+                                      icon: Icon(Icons.add),
+                                    ),
                                   ],
                                 ),
-                                IconButton(onPressed: (){}, icon: Icon(Icons.add),)
-                              ],
+                              ),
                             ),
                           )
                         : TopNumberGenerator(
@@ -265,6 +251,41 @@ class _BottomPicture extends StatelessWidget {
             ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class Label extends StatelessWidget {
+  const Label({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 20,
+        ),
+        Text(
+          '1. ',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+            color: Colors.black87,
+          ),
+        ),
+        CustomTextField(
+          onChanged: (String val) {},
+          boxWidth: MediaQuery.of(context).size.width / 3 * 2,
+          hintText: '내용을 적어주세요',
+          initialValue: null,
+          isNumbers: false,
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.close),
+        )
       ],
     );
   }
