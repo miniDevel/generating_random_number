@@ -73,7 +73,7 @@ class _ResultScreenState extends State<ResultScreen> {
         }
       }
     } else {
-      while (randomNumbers.length < widget.generationCount) {
+      while (selectLabels.length < widget.generationCount) {
         int selectLabelIndex = Random().nextInt(widget.labels!.length + 1);
         if (!selectLabels.contains(widget.labels![selectLabelIndex])) {
           selectLabels.add(widget.labels![selectLabelIndex]);

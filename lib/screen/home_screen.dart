@@ -69,12 +69,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
+                                        Text(
+                                          '선택 개수: ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 24,
+                                              color: Colors.black87),
+                                        ),
                                         CustomTextField(
                                             isNumbers: false,
                                             onChanged: onCountChanged,
-                                            boxWidth: 100,
-                                            hintText: '선택 개수',
-                                            initialValue: null),
+                                            boxWidth: 40,
+                                            hintText: '',
+                                            initialValue: '1'),
                                         SizedBox(width: 20),
                                         IconButton(
                                           onPressed: () {
@@ -183,6 +190,8 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       currentText = selectedLabelText;
       isGeneratingNumbers = false;
+      generationCount = 1;
+      print('generationCount=$generationCount');
     });
   }
 
@@ -213,10 +222,11 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }
       });
-    }else{
+    } else {
       setState(() {
-        currentText='빈 항목을 작성해줘!';
-      }); }
+        currentText = '빈 항목을 작성해줘!';
+      });
+    }
   }
 
   onModeChangeButtonPressed() {
