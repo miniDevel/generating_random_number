@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:generating_random_number/component/choose_butteon.dart';
-import 'package:generating_random_number/component/top_list_generator.dart';
 import 'package:generating_random_number/component/top_number_generator.dart';
 import 'package:generating_random_number/const/colors.dart';
-import 'package:generating_random_number/const/custom_button.dart';
 import 'package:generating_random_number/const/custom_text_field.dart';
 import 'package:generating_random_number/const/middle_button.dart';
 import 'package:generating_random_number/screen/result_screen.dart';
@@ -16,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<String> labels = ['Label 1', 'Label 2'];
   String currentText = '어떤걸 도와줄까?';
   String? maximumNumber;
   String? minimumNumber;
@@ -54,25 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     : !isGeneratingNumbers!
                         ? Expanded(
                             child: Center(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Label(),
-                                      ],
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.add),
-                                    ),
-                                  ],
-                                ),
+                              child: ListView.builder(
+                                itemCount: labels.length,
+                                itemBuilder: (context, index) {
+                                  return buildListItem(index) ;
+                                },
                               ),
                             ),
                           )
@@ -102,6 +87,36 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Widget buildListItem(int index) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            initialValue: labels[index],
+            onChanged: (value) {
+              labels[index] = value;
+            },
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              labels.removeAt(index);
+            });
+          },
+          icon: Icon(Icons.close),
+        ),
+      ],
+    );
+  }
+
+
+  onAddButtonPressed() {
+    setState(() {
+      labels.add('Label ${labels.length + 1}');
+    });
   }
 
   onTopPressed() {
@@ -256,37 +271,3 @@ class _BottomPicture extends StatelessWidget {
   }
 }
 
-class Label extends StatelessWidget {
-  const Label({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 20,
-        ),
-        Text(
-          '1. ',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 24,
-            color: Colors.black87,
-          ),
-        ),
-        CustomTextField(
-          onChanged: (String val) {},
-          boxWidth: MediaQuery.of(context).size.width / 3 * 2,
-          hintText: '내용을 적어주세요',
-          initialValue: null,
-          isNumbers: false,
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.close),
-        )
-      ],
-    );
-  }
-}
