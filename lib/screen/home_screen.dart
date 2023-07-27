@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> labels = ['null', 'null'];
+  List<String> labels = ['', ''];
   String currentText = '어떤걸 도와줄까?';
   String? maximumNumber;
   String? minimumNumber;
@@ -65,14 +65,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                         (index) => buildListItem(index),
                                       ),
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          labels.add('null');
-                                          print(labels);
-                                        });
-                                      },
-                                      icon: Icon(Icons.add),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CustomTextField(
+                                            isNumbers: false,
+                                            onChanged: onCountChanged,
+                                            boxWidth: 100,
+                                            hintText: '선택 개수',
+                                            initialValue: null),
+                                        SizedBox(width: 20),
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              labels.add('');
+                                              if (labels.length == 2) {
+                                                currentText =
+                                                    '리스트를 작성하면 내가 골라줄게!';
+                                              }
+                                              print(labels);
+                                            });
+                                          },
+                                          icon: Icon(Icons.add),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -109,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildListItem(int index) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -130,12 +147,15 @@ class _HomeScreenState extends State<HomeScreen> {
               boxWidth: MediaQuery.of(context).size.width / 3 * 2,
               hintText: '내용을 적어주세요',
               initialValue: null),
-          index == 0 || index == 1
+          index == 0 || index != labels.length - 1
               ? SizedBox(width: 50)
               : IconButton(
                   onPressed: () {
                     setState(() {
                       labels.removeAt(index);
+                      if (labels.length == 1) {
+                        currentText = '항목은 두개 이상으로 해줘!';
+                      }
                       print(labels);
                     });
                   },
@@ -172,7 +192,32 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  onListGenerateButtonPressed() {}
+  onListGenerateButtonPressed() {
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    if (!labels.contains('')) {
+      Navigator.of(context)
+          .push(
+        MaterialPageRoute(
+          builder: (_) => ResultScreen(
+            labels: labels,
+            generationCount: generationCount!,
+            isNumberGenerating: false,
+          ),
+        ),
+      )
+          .then((value) {
+        if (value != null) {
+          setState(() {
+            currentText = value;
+          });
+        }
+      });
+    }else{
+      setState(() {
+        currentText='빈 항목을 작성해줘!';
+      }); }
+  }
 
   onModeChangeButtonPressed() {
     setState(() {
@@ -218,10 +263,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 .push(
               MaterialPageRoute(
                 builder: (_) => ResultScreen(
-                    maximumNumber: maximumNumber!,
-                    minimumNumber: minimumNumber!,
-                    generationCount: generationCount!,
-                    isDuplicate: isDuplicate),
+                  maximumNumber: maximumNumber!,
+                  minimumNumber: minimumNumber!,
+                  generationCount: generationCount!,
+                  isDuplicate: isDuplicate,
+                  isNumberGenerating: true,
+                ),
               ),
             )
                 .then((value) {
@@ -251,6 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
       generationCount = null;
     } else {
       generationCount = int.parse(val);
+      print(generationCount);
     }
   }
 

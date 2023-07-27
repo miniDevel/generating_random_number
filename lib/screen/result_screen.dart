@@ -4,16 +4,20 @@ import 'package:generating_random_number/const/colors.dart';
 import 'package:generating_random_number/const/custom_button.dart';
 
 class ResultScreen extends StatefulWidget {
-  final String maximumNumber;
-  final String minimumNumber;
+  final List<String>? labels;
+  final bool isNumberGenerating;
+  final String? maximumNumber;
+  final String? minimumNumber;
   final int generationCount;
-  final bool isDuplicate;
+  final bool? isDuplicate;
 
   const ResultScreen({
-    required this.maximumNumber,
-    required this.minimumNumber,
+    this.labels,
+    required this.isNumberGenerating,
+    this.maximumNumber,
+    this.minimumNumber,
     required this.generationCount,
-    required this.isDuplicate,
+    this.isDuplicate,
     super.key,
   });
 
@@ -22,6 +26,7 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  List<String> selectLabels = [];
   bool isLoading = true;
   late int maximumNumber;
   late int minimumNumber;
@@ -31,7 +36,7 @@ class _ResultScreenState extends State<ResultScreen> {
     "뭐가 좋을까..",
     "온다..!!",
     "이번엔~~",
-    "그 숫자는..",
+    "내가 고른거는..",
   ];
   String? loadingText;
 
@@ -46,21 +51,32 @@ class _ResultScreenState extends State<ResultScreen> {
       });
     });
 
-    maximumNumber = int.parse(widget.maximumNumber);
-    minimumNumber = int.parse(widget.minimumNumber);
+    if (widget.isNumberGenerating) {
+      maximumNumber = int.parse(widget.maximumNumber!);
+      minimumNumber = int.parse(widget.minimumNumber!);
 
-    if (widget.isDuplicate) {
-      for (int i = 0; i < widget.generationCount; i++) {
-        int randomNumber =
-            Random().nextInt(maximumNumber - minimumNumber + 1) + minimumNumber;
-        randomNumbers.add(randomNumber);
+      if (widget.isDuplicate!) {
+        for (int i = 0; i < widget.generationCount; i++) {
+          int randomNumber =
+              Random().nextInt(maximumNumber - minimumNumber + 1) +
+                  minimumNumber;
+          randomNumbers.add(randomNumber);
+        }
+      } else {
+        while (randomNumbers.length < widget.generationCount) {
+          int randomNumber =
+              Random().nextInt(maximumNumber - minimumNumber + 1) +
+                  minimumNumber;
+          if (!randomNumbers.contains(randomNumber)) {
+            randomNumbers.add(randomNumber);
+          }
+        }
       }
     } else {
       while (randomNumbers.length < widget.generationCount) {
-        int randomNumber =
-            Random().nextInt(maximumNumber - minimumNumber + 1) + minimumNumber;
-        if (!randomNumbers.contains(randomNumber)) {
-          randomNumbers.add(randomNumber);
+        int selectLabelIndex = Random().nextInt(widget.labels!.length + 1);
+        if (!selectLabels.contains(widget.labels![selectLabelIndex])) {
+          selectLabels.add(widget.labels![selectLabelIndex]);
         }
       }
     }
@@ -84,14 +100,23 @@ class _ResultScreenState extends State<ResultScreen> {
                         style: customTextStyle,
                       )
                     ]
-                  : randomNumbers
-                      .map(
-                        (e) => Text(
-                          e.toString(),
-                          style: customTextStyle,
-                        ),
-                      )
-                      .toList(),
+                  : widget.isNumberGenerating
+                      ? randomNumbers
+                          .map(
+                            (e) => Text(
+                              e.toString(),
+                              style: customTextStyle,
+                            ),
+                          )
+                          .toList()
+                      : selectLabels
+                          .map(
+                            (e) => Text(
+                              e.toString(),
+                              style: customTextStyle,
+                            ),
+                          )
+                          .toList(),
             ),
             isLoading
                 ? SizedBox(height: 48)
@@ -102,7 +127,11 @@ class _ResultScreenState extends State<ResultScreen> {
               picture: isLoading
                   ? Image.asset('assets/img/loading.png')
                   : Image.asset('assets/img/result.png'),
-              text: isLoading ? loadingText! : "바로 이 숫자야!",
+              text: isLoading
+                  ? loadingText!
+                  : widget.isNumberGenerating
+                      ? "바로 이 숫자야!"
+                      : "바로 이거야!",
             ),
           ],
         ),
@@ -116,8 +145,6 @@ class _ResultScreenState extends State<ResultScreen> {
     });
   }
 }
-
-
 
 class _ResultBox extends StatelessWidget {
   final List<Text> children;
@@ -223,7 +250,7 @@ class Buttons extends StatelessWidget {
   Widget build(BuildContext context) {
     double buttonWidth = MediaQuery.of(context).size.width / 4;
     TextStyle customTextStyle =
-    TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+        TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
