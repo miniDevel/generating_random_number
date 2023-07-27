@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> labels = ['', ''];
+  List<String> labels = ['null', 'null'];
   String currentText = '어떤걸 도와줄까?';
   String? maximumNumber;
   String? minimumNumber;
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          labels.add('');
+                                          labels.add('null');
                                           print(labels);
                                         });
                                       },
@@ -86,6 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             onCountChanged: onCountChanged,
                             onMinimumNumberChanged: onMinimumNumberChanged,
                           ),
+                isGeneratingNumbers == null || isGeneratingNumbers!
+                    ? EmptySpace(2)
+                    : SizedBox(),
                 isGeneratingNumbers != null
                     ? MiddleButton(
                         onGenerateButtonPressed: isGeneratingNumbers!
@@ -93,9 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             : onListGenerateButtonPressed,
                         onModeChangeButtonPressed: onModeChangeButtonPressed,
                       )
-                    : SizedBox(),
-                isGeneratingNumbers == null || isGeneratingNumbers!
-                    ? EmptySpace(2)
                     : SizedBox(),
                 Container(child: _BottomPicture(text: currentText)),
                 SizedBox(height: 20),

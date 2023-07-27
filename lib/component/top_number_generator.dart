@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:generating_random_number/const/custom_text_field.dart';
 
-
 class TopNumberGenerator extends StatelessWidget {
   final bool isDuplicate;
   final GestureTapCallback onDuplicationBoxTap;
@@ -29,10 +28,6 @@ class TopNumberGenerator extends StatelessWidget {
           onCountChanged: onCountChanged,
           onMaximumNumberChanged: onMaximumNumberChanged,
         ),
-        SizedBox(
-          height: 40,
-        ),
-
       ],
     );
   }
@@ -44,6 +39,7 @@ class _TopEnterNumber extends StatelessWidget {
   final ValueChanged<String>? onMinimumNumberChanged;
   final ValueChanged<String>? onMaximumNumberChanged;
   final ValueChanged<String>? onCountChanged;
+
   const _TopEnterNumber({
     required this.onDuplicationBoxTap,
     required this.isDuplicate,
@@ -106,6 +102,7 @@ class _TopEnterNumber extends StatelessWidget {
 class _Duplication extends StatelessWidget {
   final bool isDuplicate;
   final GestureTapCallback onBoxTap;
+
   const _Duplication({
     required this.isDuplicate,
     required this.onBoxTap,
@@ -147,6 +144,7 @@ class _Duplication extends StatelessWidget {
 
 class _MinimumNumberTextField extends StatelessWidget {
   final ValueChanged<String>? onMinimumNumberChanged;
+
   const _MinimumNumberTextField({
     required this.onMinimumNumberChanged,
     super.key,
@@ -166,6 +164,7 @@ class _MinimumNumberTextField extends StatelessWidget {
 
 class _MaximumNumberTextField extends StatelessWidget {
   final ValueChanged<String>? onMaximumNumberChanged;
+
   const _MaximumNumberTextField({
     required this.onMaximumNumberChanged,
     super.key,
@@ -185,6 +184,7 @@ class _MaximumNumberTextField extends StatelessWidget {
 
 class _GenerationCount extends StatelessWidget {
   final ValueChanged<String>? onCountChanged;
+
   const _GenerationCount({
     required this.onCountChanged,
     super.key,
