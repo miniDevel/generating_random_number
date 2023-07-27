@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> labels = ['Label 1', 'Label 2'];
+  List<String> labels = ['', ''];
   String currentText = '어떤걸 도와줄까?';
   String? maximumNumber;
   String? minimumNumber;
@@ -53,11 +53,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     : !isGeneratingNumbers!
                         ? Expanded(
                             child: Center(
-                              child: ListView.builder(
-                                itemCount: labels.length,
-                                itemBuilder: (context, index) {
-                                  return buildListItem(index) ;
-                                },
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 30),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: List.generate(
+                                        labels.length,
+                                        (index) => buildListItem(index),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          labels.add('');
+                                          print(labels);
+                                        });
+                                      },
+                                      icon: Icon(Icons.add),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           )
@@ -90,28 +108,43 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildListItem(int index) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            initialValue: labels[index],
-            onChanged: (value) {
-              labels[index] = value;
-            },
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(width: 20),
+          Text(
+            '${index + 1}. ',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+            ),
           ),
-        ),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              labels.removeAt(index);
-            });
-          },
-          icon: Icon(Icons.close),
-        ),
-      ],
+          CustomTextField(
+              isNumbers: false,
+              onChanged: (value) {
+                labels[index] = value;
+                print(labels);
+              },
+              boxWidth: MediaQuery.of(context).size.width / 3 * 2,
+              hintText: '내용을 적어주세요',
+              initialValue: null),
+          index == 0 || index == 1
+              ? SizedBox(width: 50)
+              : IconButton(
+                  onPressed: () {
+                    setState(() {
+                      labels.removeAt(index);
+                      print(labels);
+                    });
+                  },
+                  icon: Icon(Icons.close),
+                ),
+        ],
+      ),
     );
   }
-
 
   onAddButtonPressed() {
     setState(() {
@@ -270,4 +303,3 @@ class _BottomPicture extends StatelessWidget {
     );
   }
 }
-
