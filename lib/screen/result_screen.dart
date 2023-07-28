@@ -122,6 +122,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ? SizedBox(height: 48)
                 : Buttons(
                     onRangePressed: onRangePressed,
+                    isNumbers: widget.isNumberGenerating ? true : false,
                   ),
             _BottomResultPicture(
               picture: isLoading
@@ -239,9 +240,11 @@ class _BottomResultPicture extends StatelessWidget {
 }
 
 class Buttons extends StatelessWidget {
+  final bool isNumbers;
   final VoidCallback onRangePressed;
 
   const Buttons({
+    required this.isNumbers,
     required this.onRangePressed,
     super.key,
   });
@@ -257,22 +260,24 @@ class Buttons extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          CustomButton(
-            child: Container(
-              width: buttonWidth,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "정리하기 ",
-                    style: customTextStyle,
+          isNumbers
+              ? CustomButton(
+                  child: Container(
+                    width: buttonWidth,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "정리하기 ",
+                          style: customTextStyle,
+                        ),
+                        Icon(Icons.date_range),
+                      ],
+                    ),
                   ),
-                  Icon(Icons.date_range),
-                ],
-              ),
-            ),
-            onPressed: onRangePressed,
-          ),
+                  onPressed: onRangePressed,
+                )
+              : SizedBox(),
           CustomButton(
             child: Container(
               width: buttonWidth,

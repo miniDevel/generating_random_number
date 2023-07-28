@@ -34,7 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: WHITE_COLOR,
         body: SingleChildScrollView(
           child: Container(
-            height: MediaQuery.of(context).size.height,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
             child: Column(
               children: [
                 isGeneratingNumbers == null || isGeneratingNumbers!
@@ -42,84 +45,84 @@ class _HomeScreenState extends State<HomeScreen> {
                     : SizedBox(),
                 isGeneratingNumbers == null
                     ? ChooseButton(
-                        onTopPressed: onTopPressed,
-                        topLabel: "랜덤숫자생성",
-                        onBottomPressed: onBottomPressed,
-                        bottomLabel: "리스트만들기",
-                      )
+                  onTopPressed: onTopPressed,
+                  topLabel: "랜덤숫자생성",
+                  onBottomPressed: onBottomPressed,
+                  bottomLabel: "리스트만들기",
+                )
                     : SizedBox(),
                 isGeneratingNumbers == null
                     ? SizedBox()
                     : !isGeneratingNumbers!
-                        ? Expanded(
-                            child: Center(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 30),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: List.generate(
-                                        labels.length,
-                                        (index) => buildListItem(index),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '선택 개수: ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 24,
-                                              color: Colors.black87),
-                                        ),
-                                        CustomTextField(
-                                            isNumbers: false,
-                                            onChanged: onCountChanged,
-                                            boxWidth: 40,
-                                            hintText: '',
-                                            initialValue: '1'),
-                                        SizedBox(width: 20),
-                                        IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              labels.add('');
-                                              if (labels.length == 2) {
-                                                currentText =
-                                                    '리스트를 작성하면 내가 골라줄게!';
-                                              }
-                                              print(labels);
-                                            });
-                                          },
-                                          icon: Icon(Icons.add),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+                    ? Expanded(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 30),
+                          Column(
+                            mainAxisAlignment:
+                            MainAxisAlignment.center,
+                            children: List.generate(
+                              labels.length,
+                                  (index) => buildListItem(index),
                             ),
-                          )
-                        : TopNumberGenerator(
-                            isDuplicate: isDuplicate,
-                            onDuplicationBoxTap: onDuplicationBoxTap,
-                            onMaximumNumberChanged: onMaximumNumberChanged,
-                            onCountChanged: onCountChanged,
-                            onMinimumNumberChanged: onMinimumNumberChanged,
                           ),
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '선택 개수: ',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 24,
+                                    color: Colors.black87),
+                              ),
+                              CustomTextField(
+                                  isNumbers: false,
+                                  onChanged: onCountChanged,
+                                  boxWidth: 40,
+                                  hintText: '',
+                                  initialValue: '1'),
+                              SizedBox(width: 20),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    labels.add('');
+                                    if (labels.length == 2) {
+                                      currentText =
+                                      '리스트를 작성하면 내가 골라줄게!';
+                                    }
+                                    print(labels);
+                                  });
+                                },
+                                icon: Icon(Icons.add),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+                    : TopNumberGenerator(
+                  isDuplicate: isDuplicate,
+                  onDuplicationBoxTap: onDuplicationBoxTap,
+                  onMaximumNumberChanged: onMaximumNumberChanged,
+                  onCountChanged: onCountChanged,
+                  onMinimumNumberChanged: onMinimumNumberChanged,
+                ),
                 isGeneratingNumbers == null || isGeneratingNumbers!
                     ? EmptySpace(2)
                     : SizedBox(),
                 isGeneratingNumbers != null
                     ? MiddleButton(
-                        onGenerateButtonPressed: isGeneratingNumbers!
-                            ? onNumberGenerateButtonPressed
-                            : onListGenerateButtonPressed,
-                        onModeChangeButtonPressed: onModeChangeButtonPressed,
-                      )
+                  onGenerateButtonPressed: isGeneratingNumbers!
+                      ? onNumberGenerateButtonPressed
+                      : onListGenerateButtonPressed,
+                  onModeChangeButtonPressed: onModeChangeButtonPressed,
+                )
                     : SizedBox(),
                 Container(child: _BottomPicture(text: currentText)),
                 SizedBox(height: 20),
@@ -151,23 +154,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 labels[index] = value;
                 print(labels);
               },
-              boxWidth: MediaQuery.of(context).size.width / 3 * 2,
+              boxWidth: MediaQuery
+                  .of(context)
+                  .size
+                  .width / 3 * 2,
               hintText: '내용을 적어주세요',
               initialValue: null),
           index == 0 || index != labels.length - 1
               ? SizedBox(width: 50)
               : IconButton(
-                  onPressed: () {
-                    setState(() {
-                      labels.removeAt(index);
-                      if (labels.length == 1) {
-                        currentText = '항목은 두개 이상으로 해줘!';
-                      }
-                      print(labels);
-                    });
-                  },
-                  icon: Icon(Icons.close),
-                ),
+            onPressed: () {
+              setState(() {
+                labels.removeAt(index);
+                if (labels.length == 1) {
+                  currentText = '항목은 두개 이상으로 해줘!';
+                }
+                print(labels);
+              });
+            },
+            icon: Icon(Icons.close),
+          ),
         ],
       ),
     );
@@ -203,44 +209,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
   onListGenerateButtonPressed() {
     FocusScope.of(context).requestFocus(FocusNode());
-
-    if (!labels.contains('')) {
-      Navigator.of(context)
-          .push(
-        MaterialPageRoute(
-          builder: (_) => ResultScreen(
-            labels: labels,
-            generationCount: generationCount!,
-            isNumberGenerating: false,
-          ),
-        ),
-      )
-          .then((value) {
-        if (value != null) {
-          setState(() {
-            currentText = value;
-          });
-        }
-      });
+    if (labels.length < 2) {
+      currentText = '항목은 두개 이상 만들어줘!';
     } else {
-      setState(() {
+      if (labels.contains('')) {
         currentText = '빈 항목을 작성해줘!';
-      });
-    }
-  }
-
-  onModeChangeButtonPressed() {
-    setState(() {
-      isGeneratingNumbers = !isGeneratingNumbers!;
-      if (isGeneratingNumbers!) {
-        currentText = selectedNumberText;
       } else {
-        currentText = selectedLabelText;
+        if (generationCount == null) {
+          currentText = '몇개를 골라줄까?';
+        } else {
+          if (labels.length < generationCount!) {
+            currentText = '그렇게 고를 수는 없는걸..?';
+          } else {
+            if (generationCount == 0) {
+              currentText = '0개는 고를 수 없어!';
+            } else {
+              Navigator.of(context)
+                  .push(
+                MaterialPageRoute(
+                  builder: (_) =>
+                      ResultScreen(
+                        labels: labels,
+                        generationCount: generationCount!,
+                        isNumberGenerating: false,
+                      ),
+                ),
+              )
+                  .then((value) {
+                if (value != null) {
+                  setState(() {
+                    currentText = value;
+                  });
+                }
+              });
+            }
+          }
+        }
       }
-      maximumNumber = null;
-      minimumNumber = null;
-      generationCount = null;
-    });
+    }
   }
 
   onNumberGenerateButtonPressed() {
@@ -272,13 +278,14 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.of(context)
                 .push(
               MaterialPageRoute(
-                builder: (_) => ResultScreen(
-                  maximumNumber: maximumNumber!,
-                  minimumNumber: minimumNumber!,
-                  generationCount: generationCount!,
-                  isDuplicate: isDuplicate,
-                  isNumberGenerating: true,
-                ),
+                builder: (_) =>
+                    ResultScreen(
+                      maximumNumber: maximumNumber!,
+                      minimumNumber: minimumNumber!,
+                      generationCount: generationCount!,
+                      isDuplicate: isDuplicate,
+                      isNumberGenerating: true,
+                    ),
               ),
             )
                 .then((value) {
@@ -293,6 +300,20 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
     FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  onModeChangeButtonPressed() {
+    setState(() {
+      isGeneratingNumbers = !isGeneratingNumbers!;
+      if (isGeneratingNumbers!) {
+        currentText = selectedNumberText;
+      } else {
+        currentText = selectedLabelText;
+      }
+      maximumNumber = null;
+      minimumNumber = null;
+      generationCount = null;
+    });
   }
 
   onMinimumNumberChanged(String? val) {
@@ -326,8 +347,8 @@ Widget EmptySpace(int flex) {
     flex: flex,
     child: Container(
         child: SizedBox(
-      width: 50,
-    )),
+          width: 50,
+        )),
   );
 }
 
