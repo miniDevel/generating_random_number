@@ -3,6 +3,7 @@ import 'package:generating_random_number/component/choose_butteon.dart';
 import 'package:generating_random_number/component/top_number_generator.dart';
 import 'package:generating_random_number/const/colors.dart';
 import 'package:generating_random_number/const/custom_text_field.dart';
+import 'package:generating_random_number/const/empty_space.dart';
 import 'package:generating_random_number/const/middle_button.dart';
 import 'package:generating_random_number/screen/result_screen.dart';
 
@@ -26,6 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle customTextStyle = TextStyle(
+        fontWeight: FontWeight.w600, fontSize: 20, color: Colors.black87);
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -34,95 +38,106 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: WHITE_COLOR,
         body: SingleChildScrollView(
           child: Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
+            height: MediaQuery.of(context).size.height,
             child: Column(
               children: [
                 isGeneratingNumbers == null || isGeneratingNumbers!
-                    ? EmptySpace(3)
+                    ? emptySpace(3)
                     : SizedBox(),
                 isGeneratingNumbers == null
                     ? ChooseButton(
-                  onTopPressed: onTopPressed,
-                  topLabel: "랜덤숫자생성",
-                  onBottomPressed: onBottomPressed,
-                  bottomLabel: "리스트만들기",
-                )
+                        onTopPressed: onTopPressed,
+                        topLabel: "랜덤숫자생성",
+                        onBottomPressed: onBottomPressed,
+                        bottomLabel: "리스트만들기",
+                      )
                     : SizedBox(),
                 isGeneratingNumbers == null
                     ? SizedBox()
                     : !isGeneratingNumbers!
-                    ? Expanded(
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 30),
-                          Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
-                            children: List.generate(
-                              labels.length,
-                                  (index) => buildListItem(index),
+                        ? Expanded(
+                            child: Center(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 30),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: List.generate(
+                                        labels.length,
+                                        (index) => buildListItem(index),
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '선택 개수: ',
+                                          style: customTextStyle,
+                                        ),
+                                        CustomTextField(
+                                            isNumbers: false,
+                                            onChanged: onCountChanged,
+                                            boxWidth: 40,
+                                            hintText: '',
+                                            initialValue: '1'),
+                                        SizedBox(width: 20),
+                                        TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              labels.add('');
+                                              if (labels.length == 2) {
+                                                currentText =
+                                                    '리스트를 작성하면 내가 골라줄게!';
+                                              }
+                                              print(labels);
+                                            });
+                                          },
+                                          child: Text(
+                                            '항목추가+',
+                                            style: customTextStyle,
+                                          ),
+                                        ),
+                                        SizedBox(width: 20),
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(
+                                              () {
+                                                labels = ['', ''];
+                                              },
+                                            );
+                                          },
+                                          icon: Icon(
+                                            Icons.delete_forever,
+                                            color: Colors.black87,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
+                          )
+                        : TopNumberGenerator(
+                            isDuplicate: isDuplicate,
+                            onDuplicationBoxTap: onDuplicationBoxTap,
+                            onMaximumNumberChanged: onMaximumNumberChanged,
+                            onCountChanged: onCountChanged,
+                            onMinimumNumberChanged: onMinimumNumberChanged,
                           ),
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '선택 개수: ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 24,
-                                    color: Colors.black87),
-                              ),
-                              CustomTextField(
-                                  isNumbers: false,
-                                  onChanged: onCountChanged,
-                                  boxWidth: 40,
-                                  hintText: '',
-                                  initialValue: '1'),
-                              SizedBox(width: 20),
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    labels.add('');
-                                    if (labels.length == 2) {
-                                      currentText =
-                                      '리스트를 작성하면 내가 골라줄게!';
-                                    }
-                                    print(labels);
-                                  });
-                                },
-                                icon: Icon(Icons.add),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-                    : TopNumberGenerator(
-                  isDuplicate: isDuplicate,
-                  onDuplicationBoxTap: onDuplicationBoxTap,
-                  onMaximumNumberChanged: onMaximumNumberChanged,
-                  onCountChanged: onCountChanged,
-                  onMinimumNumberChanged: onMinimumNumberChanged,
-                ),
                 isGeneratingNumbers == null || isGeneratingNumbers!
-                    ? EmptySpace(2)
+                    ? emptySpace(2)
                     : SizedBox(),
                 isGeneratingNumbers != null
                     ? MiddleButton(
-                  onGenerateButtonPressed: isGeneratingNumbers!
-                      ? onNumberGenerateButtonPressed
-                      : onListGenerateButtonPressed,
-                  onModeChangeButtonPressed: onModeChangeButtonPressed,
-                )
+                        onGenerateButtonPressed: isGeneratingNumbers!
+                            ? onNumberGenerateButtonPressed
+                            : onListGenerateButtonPressed,
+                        onModeChangeButtonPressed: onModeChangeButtonPressed,
+                      )
                     : SizedBox(),
                 Container(child: _BottomPicture(text: currentText)),
                 SizedBox(height: 20),
@@ -154,26 +169,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 labels[index] = value;
                 print(labels);
               },
-              boxWidth: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 3 * 2,
+              boxWidth: MediaQuery.of(context).size.width / 3 * 2,
               hintText: '내용을 적어주세요',
               initialValue: null),
           index == 0 || index != labels.length - 1
               ? SizedBox(width: 50)
               : IconButton(
-            onPressed: () {
-              setState(() {
-                labels.removeAt(index);
-                if (labels.length == 1) {
-                  currentText = '항목은 두개 이상으로 해줘!';
-                }
-                print(labels);
-              });
-            },
-            icon: Icon(Icons.close),
-          ),
+                  onPressed: () {
+                    setState(() {
+                      labels.removeAt(index);
+                      if (labels.length == 1) {
+                        currentText = '항목은 두개 이상으로 해줘!';
+                      }
+                      print(labels);
+                    });
+                  },
+                  icon: Icon(Icons.close),
+                ),
         ],
       ),
     );
@@ -210,38 +222,53 @@ class _HomeScreenState extends State<HomeScreen> {
   onListGenerateButtonPressed() {
     FocusScope.of(context).requestFocus(FocusNode());
     if (labels.length < 2) {
-      currentText = '항목은 두개 이상 만들어줘!';
+      setState(() {
+        currentText = '두개 이상 있어야 된다니까?!';
+      });
     } else {
       if (labels.contains('')) {
-        currentText = '빈 항목을 작성해줘!';
+        setState(() {
+          currentText = '빈 항목을 작성해줘!';
+        });
       } else {
         if (generationCount == null) {
-          currentText = '몇개를 골라줄까?';
+          setState(() {
+            currentText = '몇개를 골라줄까?';
+          });
         } else {
           if (labels.length < generationCount!) {
-            currentText = '그렇게 고를 수는 없는걸..?';
+            setState(() {
+              currentText = '그렇게 고를 수는 없는걸..?';
+            });
           } else {
             if (generationCount == 0) {
-              currentText = '0개는 고를 수 없어!';
-            } else {
-              Navigator.of(context)
-                  .push(
-                MaterialPageRoute(
-                  builder: (_) =>
-                      ResultScreen(
-                        labels: labels,
-                        generationCount: generationCount!,
-                        isNumberGenerating: false,
-                      ),
-                ),
-              )
-                  .then((value) {
-                if (value != null) {
-                  setState(() {
-                    currentText = value;
-                  });
-                }
+              setState(() {
+                currentText = '0개는 고를 수 없어!';
               });
+            } else {
+              if(labels.length == generationCount){
+                setState(() {
+                  currentText = '전부다 선택하면 되는거야..?';
+                });
+              }else {
+                Navigator.of(context)
+                    .push(
+                  MaterialPageRoute(
+                    builder: (_) => ResultScreen(
+                      labels: labels,
+                      generationCount: generationCount!,
+                      isNumberGenerating: false,
+                    ),
+                  ),
+                )
+                    .then((value) {
+                  if (value != null) {
+                    setState(() {
+                      currentText = value;
+                    });
+                  }
+                });
+              }
             }
           }
         }
@@ -278,14 +305,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.of(context)
                 .push(
               MaterialPageRoute(
-                builder: (_) =>
-                    ResultScreen(
-                      maximumNumber: maximumNumber!,
-                      minimumNumber: minimumNumber!,
-                      generationCount: generationCount!,
-                      isDuplicate: isDuplicate,
-                      isNumberGenerating: true,
-                    ),
+                builder: (_) => ResultScreen(
+                  maximumNumber: maximumNumber!,
+                  minimumNumber: minimumNumber!,
+                  generationCount: generationCount!,
+                  isDuplicate: isDuplicate,
+                  isNumberGenerating: true,
+                ),
               ),
             )
                 .then((value) {
@@ -340,16 +366,6 @@ class _HomeScreenState extends State<HomeScreen> {
       maximumNumber = val;
     }
   }
-}
-
-Widget EmptySpace(int flex) {
-  return Expanded(
-    flex: flex,
-    child: Container(
-        child: SizedBox(
-          width: 50,
-        )),
-  );
 }
 
 class _BottomPicture extends StatelessWidget {

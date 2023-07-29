@@ -74,7 +74,7 @@ class _ResultScreenState extends State<ResultScreen> {
       }
     } else {
       while (selectLabels.length < widget.generationCount) {
-        int selectLabelIndex = Random().nextInt(widget.labels!.length + 1);
+        int selectLabelIndex = Random().nextInt(widget.labels!.length);
         if (!selectLabels.contains(widget.labels![selectLabelIndex])) {
           selectLabels.add(widget.labels![selectLabelIndex]);
         }
@@ -84,9 +84,6 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle customTextStyle =
-        TextStyle(fontWeight: FontWeight.w600, fontSize: 50);
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: WHITE_COLOR,
@@ -94,29 +91,10 @@ class _ResultScreenState extends State<ResultScreen> {
           children: [
             _ResultBox(
               children: isLoading
-                  ? [
-                      Text(
-                        ". . .",
-                        style: customTextStyle,
-                      )
-                    ]
+                  ? [". . ."]
                   : widget.isNumberGenerating
                       ? randomNumbers
-                          .map(
-                            (e) => Text(
-                              e.toString(),
-                              style: customTextStyle,
-                            ),
-                          )
-                          .toList()
-                      : selectLabels
-                          .map(
-                            (e) => Text(
-                              e.toString(),
-                              style: customTextStyle,
-                            ),
-                          )
-                          .toList(),
+                      : selectLabels,
             ),
             isLoading
                 ? SizedBox(height: 48)
@@ -148,7 +126,7 @@ class _ResultScreenState extends State<ResultScreen> {
 }
 
 class _ResultBox extends StatelessWidget {
-  final List<Text> children;
+  final List children;
 
   const _ResultBox({
     required this.children,
@@ -157,6 +135,8 @@ class _ResultBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle customTextStyle =
+        TextStyle(fontWeight: FontWeight.w600, fontSize: 50);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -175,7 +155,14 @@ class _ResultBox extends StatelessWidget {
                 child: Center(
                   child: Wrap(
                     spacing: 40,
-                    children: children,
+                    children: children
+                        .map(
+                          (e) => Text(
+                            e.toString(),
+                            style: customTextStyle,
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
               ),
