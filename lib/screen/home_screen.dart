@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onCountChanged: onCountChanged,
                             textControllers: textControllers,
                             listItems: listItems,
-                            onInitializeButton: onInitializeButton,
+                            onInitializeButton: onInitializeIcon,
                             onDeleteIcon: onDeleteIcon,
                           )
                         : TopNumberGenerator(
@@ -96,15 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
   onDeleteIcon() {
     setState(() {
       listItems.removeAt(listItems.length - 1);
-      textControllers.removeAt(listItems.length - 1);
+      textControllers.removeAt(textControllers.length-1);
       if (listItems.length == 1) {
         currentText = '항목은 두개 이상으로 해줘!';
       }
+
     });
   }
 
   // 리스트만들기에서 작성 초기화 버튼
-  onInitializeButton() {
+  onInitializeIcon() {
     const TextStyle customTextStyle = TextStyle(
         fontWeight: FontWeight.w600, fontSize: 20, color: Colors.grey);
 
@@ -122,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
               onPressed: () {
                 setState(
-                  () {
+                      () {
                     listItems = ['', ''];
                     textControllers = [
                       TextEditingController(),

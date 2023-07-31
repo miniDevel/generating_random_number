@@ -39,7 +39,7 @@ class TopListGenerator extends StatelessWidget {
                     return ListItem(
                       controller: textControllers[index],
                       index: index,
-                      iconOnPressed: onDeleteIcon,
+                      onDeleteIcon: onDeleteIcon,
                       listItems: listItems,
                     );
                   },

@@ -4,11 +4,11 @@ import 'package:generating_random_number/const/custom_text_field.dart';
 class ListItem extends StatelessWidget {
   final TextEditingController controller;
   final List<String> listItems;
-  final VoidCallback iconOnPressed;
+  final VoidCallback onDeleteIcon;
   final int index;
   const ListItem({
     required this.controller,
-    required this.iconOnPressed,
+    required this.onDeleteIcon,
     required this.listItems,
     required this.index,
     super.key,
@@ -41,7 +41,7 @@ class ListItem extends StatelessWidget {
           index == 0 || index != listItems.length - 1
               ? const SizedBox(width: 50)
               : IconButton(
-                  onPressed: iconOnPressed,
+                  onPressed: onDeleteIcon,
                   icon: const Icon(Icons.close),
                 ),
         ],
