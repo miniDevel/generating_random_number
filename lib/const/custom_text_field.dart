@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
-
+  final TextEditingController? controller;
   final bool isNumbers;
   final ValueChanged<String>? onChanged;
   final String? initialValue;
@@ -10,30 +10,30 @@ class CustomTextField extends StatelessWidget {
   final double boxWidth;
 
   const CustomTextField({
+    this.controller,
     required this.isNumbers,
     required this.onChanged,
     required this.boxWidth,
     required this.hintText,
     required this.initialValue,
-
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: this.boxWidth,
+    return SizedBox(
+      width: boxWidth,
       height: 40,
       child: renderTextField(),
     );
   }
 
   Widget renderTextField() {
-    TextStyle customTextStyle =
+    const TextStyle customTextStyle =
         TextStyle(fontWeight: FontWeight.w600, fontSize: 24);
 
     return TextFormField(
-
+      controller: controller,
       onChanged: onChanged,
       style: customTextStyle.copyWith(color: Colors.black87),
       cursorColor: Colors.black87,
@@ -44,10 +44,10 @@ class CustomTextField extends StatelessWidget {
       inputFormatters:
           isNumbers ? [FilteringTextInputFormatter.digitsOnly] : null,
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(bottom: 8),
+          contentPadding: const EdgeInsets.only(bottom: 8),
           hintText: hintText,
           hintStyle: customTextStyle.copyWith(color: Colors.grey),
-          focusedBorder: UnderlineInputBorder(
+          focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
               color: Colors.black87,
               width: 2,

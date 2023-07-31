@@ -14,12 +14,12 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.grey,
+      ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: child,
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.grey,
       ),
     );
   }

@@ -46,12 +46,11 @@ class _TopEnterNumber extends StatelessWidget {
     required this.onCountChanged,
     required this.onMaximumNumberChanged,
     required this.onMinimumNumberChanged,
-    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    TextStyle customTextStyle =
+    const TextStyle customTextStyle =
         TextStyle(fontWeight: FontWeight.w600, fontSize: 30);
 
     return Column(
@@ -62,14 +61,14 @@ class _TopEnterNumber extends StatelessWidget {
             _MinimumNumberTextField(
               onMinimumNumberChanged: onMinimumNumberChanged,
             ),
-            Text(
+            const Text(
               " 에서  ",
               style: customTextStyle,
             ),
             _MaximumNumberTextField(
               onMaximumNumberChanged: onMaximumNumberChanged,
             ),
-            Text(
+            const Text(
               " 까지",
               style: customTextStyle,
             ),
@@ -81,13 +80,13 @@ class _TopEnterNumber extends StatelessWidget {
             _GenerationCount(
               onCountChanged: onCountChanged,
             ),
-            Text(
+            const Text(
               " 개 숫자 생성!",
               style: customTextStyle,
             )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         _Duplication(
@@ -106,7 +105,7 @@ class _Duplication extends StatelessWidget {
   const _Duplication({
     required this.isDuplicate,
     required this.onBoxTap,
-    super.key,
+
   });
 
   @override
@@ -114,7 +113,7 @@ class _Duplication extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           "중복 숫자 허용",
           style: TextStyle(
             fontWeight: FontWeight.w500,
@@ -122,16 +121,16 @@ class _Duplication extends StatelessWidget {
             height: 1,
           ),
         ),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         GestureDetector(
           onTap: onBoxTap,
           child: Container(
             child: isDuplicate
-                ? Icon(
+                ? const Icon(
                     Icons.check_box_outlined,
                     size: 30,
                   )
-                : Icon(
+                : const Icon(
                     Icons.check_box_outline_blank_rounded,
                     size: 30,
                   ),
@@ -147,7 +146,7 @@ class _MinimumNumberTextField extends StatelessWidget {
 
   const _MinimumNumberTextField({
     required this.onMinimumNumberChanged,
-    super.key,
+
   });
 
   @override
@@ -167,7 +166,7 @@ class _MaximumNumberTextField extends StatelessWidget {
 
   const _MaximumNumberTextField({
     required this.onMaximumNumberChanged,
-    super.key,
+
   });
 
   @override
@@ -187,7 +186,7 @@ class _GenerationCount extends StatelessWidget {
 
   const _GenerationCount({
     required this.onCountChanged,
-    super.key,
+
   });
 
   @override

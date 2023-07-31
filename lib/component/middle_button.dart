@@ -12,27 +12,27 @@ class MiddleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle customButtonTextStyle =
-    TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+    const TextStyle customButtonTextStyle =
+        TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
 
     return Column(
       children: [
         CustomButton(
-          child: Text(
+          onPressed: onGenerateButtonPressed,
+          child: const Text(
             "생성 하기",
             style: customButtonTextStyle,
           ),
-          onPressed: onGenerateButtonPressed,
         ),
-        SizedBox(
-          height: 10,
+        const SizedBox(
+          height: 20,
         ),
         CustomButton(
-          child: Text(
+          onPressed: onModeChangeButtonPressed,
+          child: const Text(
             "모드 변경",
             style: customButtonTextStyle,
           ),
-          onPressed: onModeChangeButtonPressed,
         ),
       ],
     );

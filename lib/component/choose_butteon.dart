@@ -25,7 +25,7 @@ class ChooseButton extends StatelessWidget {
               onPressed: onTopPressed,
               label: topLabel,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ModeSelectButton(
               onPressed: onBottomPressed,
               label: bottomLabel,
@@ -48,15 +48,15 @@ class ModeSelectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle customTextStyle =
+    const TextStyle customTextStyle =
         TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
 
     return CustomButton(
+      onPressed: onPressed,
       child: Text(
         label,
         style: customTextStyle,
       ),
-      onPressed: onPressed,
     );
   }
 }

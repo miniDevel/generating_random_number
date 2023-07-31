@@ -4,7 +4,7 @@ import 'package:generating_random_number/const/colors.dart';
 import 'package:generating_random_number/const/custom_button.dart';
 
 class ResultScreen extends StatefulWidget {
-  final List<String>? labels;
+  final List<String>? listItems;
   final bool isNumberGenerating;
   final String? maximumNumber;
   final String? minimumNumber;
@@ -12,7 +12,7 @@ class ResultScreen extends StatefulWidget {
   final bool? isDuplicate;
 
   const ResultScreen({
-    this.labels,
+    this.listItems,
     required this.isNumberGenerating,
     this.maximumNumber,
     this.minimumNumber,
@@ -26,7 +26,7 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
-  List<String> selectLabels = [];
+  List<String> selectListItems = [];
   bool isLoading = true;
   late int maximumNumber;
   late int minimumNumber;
@@ -45,7 +45,7 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
     loadingText = loadingTexts[Random().nextInt(loadingTexts.length)];
 
-    Future.delayed(Duration(milliseconds: 1500), () {
+    Future.delayed(const Duration(milliseconds: 1500), () {
       setState(() {
         isLoading = false;
       });
@@ -73,10 +73,10 @@ class _ResultScreenState extends State<ResultScreen> {
         }
       }
     } else {
-      while (selectLabels.length < widget.generationCount) {
-        int selectLabelIndex = Random().nextInt(widget.labels!.length);
-        if (!selectLabels.contains(widget.labels![selectLabelIndex])) {
-          selectLabels.add(widget.labels![selectLabelIndex]);
+      while (selectListItems.length < widget.generationCount) {
+        int selectListItemIndex = Random().nextInt(widget.listItems!.length);
+        if (!selectListItems.contains(widget.listItems![selectListItemIndex])) {
+          selectListItems.add(widget.listItems![selectListItemIndex]);
         }
       }
     }
@@ -94,10 +94,10 @@ class _ResultScreenState extends State<ResultScreen> {
                   ? [". . ."]
                   : widget.isNumberGenerating
                       ? randomNumbers
-                      : selectLabels,
+                      : selectListItems,
             ),
             isLoading
-                ? SizedBox(height: 48)
+                ? const SizedBox(height: 48)
                 : Buttons(
                     onRangePressed: onRangePressed,
                     isNumbers: widget.isNumberGenerating ? true : false,
@@ -130,12 +130,11 @@ class _ResultBox extends StatelessWidget {
 
   const _ResultBox({
     required this.children,
-    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    TextStyle customTextStyle =
+    const TextStyle customTextStyle =
         TextStyle(fontWeight: FontWeight.w600, fontSize: 50);
     return Expanded(
       child: Padding(
@@ -145,6 +144,17 @@ class _ResultBox extends StatelessWidget {
         ),
         child: Container(
           width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              color: WHITE_COLOR,
+              borderRadius: BorderRadius.circular(8.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 10.0,
+                  spreadRadius: 0.5,
+                  offset: Offset(0, 6),
+                )
+              ]),
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 12.0,
@@ -168,17 +178,6 @@ class _ResultBox extends StatelessWidget {
               ),
             ),
           ),
-          decoration: BoxDecoration(
-              color: WHITE_COLOR,
-              borderRadius: BorderRadius.circular(8.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 10.0,
-                  spreadRadius: 0.5,
-                  offset: Offset(0, 6),
-                )
-              ]),
         ),
       ),
     );
@@ -192,7 +191,6 @@ class _BottomResultPicture extends StatelessWidget {
   const _BottomResultPicture({
     required this.picture,
     required this.text,
-    super.key,
   });
 
   @override
@@ -211,12 +209,13 @@ class _BottomResultPicture extends StatelessWidget {
         Positioned(
           top: 50,
           right: 14,
-          child: Container(
+          child: SizedBox(
             width: 138,
             child: Center(
               child: Text(
                 text,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                style:
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -239,7 +238,7 @@ class Buttons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double buttonWidth = MediaQuery.of(context).size.width / 4;
-    TextStyle customTextStyle =
+    const TextStyle customTextStyle =
         TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
 
     return Padding(
@@ -249,9 +248,10 @@ class Buttons extends StatelessWidget {
         children: [
           isNumbers
               ? CustomButton(
-                  child: Container(
+                  onPressed: onRangePressed,
+                  child: SizedBox(
                     width: buttonWidth,
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -262,13 +262,12 @@ class Buttons extends StatelessWidget {
                       ],
                     ),
                   ),
-                  onPressed: onRangePressed,
                 )
-              : SizedBox(),
+              : const SizedBox(),
           CustomButton(
-            child: Container(
+            child: SizedBox(
               width: buttonWidth,
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
